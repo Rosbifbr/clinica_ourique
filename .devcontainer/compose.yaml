@@ -7,7 +7,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
 
     volumes:
-      - ..:/workspaces:cached
+      - ..:/rails
       - bundle:/usr/local/bundle
       - rails_cache:/rails/tmp/cache
 
