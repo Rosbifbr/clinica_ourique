@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       redirect_to root_path, notice: 'Signed in successfully!'
     else
       flash.now[:alert] = 'Invalid name or password'
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

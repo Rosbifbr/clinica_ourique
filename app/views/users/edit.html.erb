@@ -4,9 +4,9 @@
 
 <%= render "form", user: @user %>
 
-<br>
+<br><br>
 
 <div>
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
+  <%= button_to "Show this user", @user , method: :get %>
+  <%= button_to "Back to users", users_path , method: :get %>
 </div>

@@ -8,9 +8,9 @@
   <% @users.each do |user| %>
     <%= render user %>
     <p>
-      <%= link_to "Show this user", user %>
+      <%= button_to "Show this user", user , method: :get %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New user", new_user_path %>
+<%= button_to "New user", new_user_path , method: :get %>

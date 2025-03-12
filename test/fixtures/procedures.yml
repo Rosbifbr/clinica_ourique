@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  client: one
+  date: 2025-03-06
+  description: MyText
+
+two:
+  name: MyString
+  client: two
+  date: 2025-03-06
+  description: MyText

@@ -11,7 +11,7 @@
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%# tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -23,6 +23,25 @@
   </head>
 
   <body>
-    <%= yield %>
+      <div class="top-buttons">
+        <% if user_signed_in? %>
+            <%= button_to "Log Out", sign_out_path, method: :get , class: "top-buttons" %>
+
+          <% unless request.path == users_path || request.path == sign_in_path %>
+            <%= button_to "Users", users_path, method: :get , class: "top-buttons" %>
+          <% end %>
+
+          <% unless request.path == clients_path %>
+            <%= button_to "Clients", clients_path, method: :get , class: "top-buttons" %>
+          <% end %>
+        <% end %>
+      </div>
+      <%= yield %>
+
+      <% flash.each do |name, msg| %>
+            <div class="<%= name %>">
+              <%= msg %>
+            </div>
+      <% end %>
   </body>
 </html>

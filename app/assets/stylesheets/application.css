@@ -8,3 +8,41 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between; /* Distributes space between the buttons */
+    align-items: center;
+    margin-bottom: 10px; /* Optional: adds some space below the buttons */
+}
+
+.top-button {
+    margin-right: 10px; /* Adds space between buttons */
+}
+
+.button-group {
+    display: inline-flex;
+    gap: 10px;
+}
+
+.alert {
+    color: red;
+    padding: 10px;
+    margin: 10px 0;
+    background: #ffe6e6;
+    border: 1px solid red;
+}
+
+.notice {
+    color: green;
+    padding: 10px;
+    margin: 10px 0;
+    background: #e6ffe6;
+    border: 1px solid green;
+}

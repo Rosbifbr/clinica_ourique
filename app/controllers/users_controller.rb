@@ -28,8 +28,11 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+      format.html do
+        flash.now[:alert] = 'Invalid email or password'
+        render :new, status: :unprocessable_entity
+      end
+      format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -60,11 +63,11 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params.expect(:id))
+      @user = User.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :name, :password ])
+      params.require(:user).permit(:name, :password)
     end
 end
