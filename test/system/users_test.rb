@@ -37,7 +37,5 @@ class UsersTest < ApplicationSystemTestCase
   test "should destroy User" do
     visit user_url(@user)
     click_on "Destroy this user", match: :first
-
-
   end
 end

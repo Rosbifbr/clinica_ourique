@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
-
-  #use the following command inside .devcontainer so you can use commands in the server: docker exec -it clinica_ourique-rails-app-1 bash
+  # use the following command inside .devcontainer so you can use commands in the server: docker exec -it clinica_ourique-rails-app-1 bash
 
   before_action :authenticate_user!
 

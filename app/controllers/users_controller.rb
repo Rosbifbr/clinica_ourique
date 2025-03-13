@@ -29,7 +29,7 @@ class UsersController < ApplicationController
         format.json { render :show, status: :created, location: @user }
       else
         format.html do
-          flash.now[:alert] = 'Invalid name or password'
+          flash.now[:alert] = "Invalid name or password"
           render :new, status: :unprocessable_entity
         end
       format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -41,9 +41,9 @@ class UsersController < ApplicationController
   def update
     if @user.update(user_params)
         redirect_to @user, notice: "User was successfully updated."
-      else
+    else
         render :edit, status: :unprocessable_entity
-      end
+    end
     end
 
 

@@ -1,5 +1,5 @@
   class ClientsController < ApplicationController
-    before_action :set_client, only: [:show, :edit, :update, :destroy]
+    before_action :set_client, only: [ :show, :edit, :update, :destroy ]
 
     # GET /clients or /clients.json
     def index
@@ -57,7 +57,7 @@
     def destroy
       @client = Client.find(params[:id])
       @client.destroy
-      redirect_to clients_path, notice: 'Client was successfully deleted.'
+      redirect_to clients_path, notice: "Client was successfully deleted."
     end
 
     private
