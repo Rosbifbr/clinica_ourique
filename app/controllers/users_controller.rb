@@ -28,10 +28,10 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
-      format.html do
-        flash.now[:alert] = 'Invalid email or password'
-        render :new, status: :unprocessable_entity
-      end
+        format.html do
+          flash.now[:alert] = 'Invalid name or password'
+          render :new, status: :unprocessable_entity
+        end
       format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -39,16 +39,13 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
+    if @user.update(user_params)
+        redirect_to @user, notice: "User was successfully updated."
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        render :edit, status: :unprocessable_entity
       end
     end
-  end
+
 
   # DELETE /users/1 or /users/1.json
   def destroy
