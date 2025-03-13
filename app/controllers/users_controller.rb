@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     else
         render :edit, status: :unprocessable_entity
     end
-    end
+  end
 
 
   # DELETE /users/1 or /users/1.json
