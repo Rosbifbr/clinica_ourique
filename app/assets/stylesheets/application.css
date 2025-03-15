@@ -22,6 +22,71 @@ body {
   flex-direction: column;
 }
 
+table.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #dee2e6; /* Softer border color */
+  border-radius: 0.5rem !important; /* More pronounced rounding */
+  overflow: hidden; /* Ensures content respects border-radius */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #fff; /* Clean white background */
+}
+
+table.table th {
+  border: 1px solid #dee2e6 !important;
+  padding: 20px !important; /* More spacious padding */
+  background: linear-gradient(135deg, #198754 0%, #157347 100%) !important; /* Sexy gradient */
+  color: white !important;
+  font-weight: 600; /* Bolder text */
+  text-transform: uppercase; /* Adds sophistication */
+  letter-spacing: 0.5px; /* Better spacing */
+}
+
+table.table td {
+  border-left: 1px solid #dee2e6 !important;
+  border-right: 1px solid #dee2e6 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  padding: 20px !important;
+  transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+/* Row borders */
+table.table tr {
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Fix first and last rows */
+table.table tr:first-child td {
+  border-top: 1px solid #dee2e6 !important;
+}
+
+table.table tr:last-child td {
+  border-bottom: 0 !important; /* Clean edge at bottom */
+}
+
+/* Sexy hover effect */
+table.table tbody tr:hover {
+  background-color: rgba(25, 135, 84, 0.05); /* Subtle green tint */
+}
+
+/* Round the corners properly */
+table.table th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+table.table th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+table.table tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+table.table tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
 .navbar {
   background-color: var(--clinic-primary) !important;
 }

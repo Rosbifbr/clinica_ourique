@@ -1,9 +1,9 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, class: "card shadow-sm p-4 mb-4") do |form| %>
   <% if user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5><i class="bi bi-exclamation-triangle-fill me-2"></i><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
 
-      <ul>
+      <ul class="mb-0 mt-2">
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,17 +11,18 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label fw-medium" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Enter name" %>
   </div>
 
-  <div>
-    <%= form.label :password, style: "display: block" %>
-    <%= form.text_field :password %>
+  <div class="mb-3">
+    <%= form.label :password, class: "form-label fw-medium" %>
+    <%= form.password_field :password, class: "form-control", placeholder: "Enter password" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+    <%= link_to "Cancel", users_path, class: "btn btn-outline-secondary me-md-2" if defined?(users_path) %>
+    <%= form.submit class: "btn btn-success" %>
   </div>
 <% end %>

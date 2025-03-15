@@ -8,7 +8,7 @@
 
 <br>
 
-<table border = "1">
+<table class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -33,13 +33,13 @@
           <td><%= client.neighborhood %></td>
           <td>
             <div class="button-group">
-                <%= button_to 'Show', client_path(client), method: :get %>
-                <%= button_to 'Edit', edit_client_path(client), method: :get %>
-                <%= button_to 'Delete', client_path(client), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+                <%= button_to 'Show', client_path(client), method: :get, class: "btn btn-secondary btn-sm" %>
+                <%= button_to 'Edit', edit_client_path(client), method: :get, class: "btn btn-light btn-sm" %>
+                <%= button_to 'Delete', client_path(client), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-light btn-sm" %>
             </div>
           </td>
     <% end %>
   </tbody>
 </table>
 
-<%= button_to "Add New Client", new_client_path ,  method: :get %>
+<%= button_to "Add New Client", new_client_path ,  method: :get , class: "btn btn-sm" %>

@@ -1,20 +1,19 @@
-<h1>Sign In</h1>
-<%= form_with url: sign_in_path, method: :post do %>
-  <div>
-    <%= label_tag :name %> <br>
-    <%= text_field_tag :name %>
-  </div>
-  <div>
-    <%= label_tag :password %> <br>
-    <%= password_field_tag :password %>
-  </div>
-  <div>
-    <%= submit_tag 'Sign In' %>
-  </div>
-<% end %>
+<div class="card shadow-sm p-4 mb-4">
+  <h1>Sign In</h1>
+  <%= form_with url: sign_in_path, method: :post, class: "mt-3" do %>
+    <div class="mb-3">
+      <%= label_tag :name, nil, class: "form-label fw-medium" %>
+      <%= text_field_tag :name, nil, class: "form-control", placeholder: "Enter name" %>
+    </div>
 
-<br>
+    <div class="mb-3">
+      <%= label_tag :password, nil, class: "form-label fw-medium" %>
+      <%= password_field_tag :password, nil, class: "form-control", placeholder: "Enter password" %>
+    </div>
 
-<div>
-  <%= link_to "Create User", new_user_path %>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+      <%= link_to "Create User", new_user_path, class: "btn btn-outline-secondary me-md-2" %>
+      <%= submit_tag 'Sign In', class: "btn btn-success" %>
+    </div>
+  <% end %>
 </div>

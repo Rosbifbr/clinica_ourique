@@ -1,9 +1,9 @@
-<%= form_with(model: client) do |form| %>
+<%= form_with(model: client, class: "card shadow-sm p-4 mb-4") do |form| %>
   <% if client.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5><i class="bi bi-exclamation-triangle-fill me-2"></i><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h5>
 
-      <ul>
+      <ul class="mb-0 mt-2">
         <% client.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,42 +11,43 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label fw-medium" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Enter name" %>
   </div>
 
-  <div>
-    <%= form.label :cpf, style: "display: block" %>
-    <%= form.text_field :cpf %>
+  <div class="mb-3">
+    <%= form.label :cpf, class: "form-label fw-medium" %>
+    <%= form.text_field :cpf, class: "form-control", placeholder: "Enter CPF" %>
   </div>
 
-  <div>
-    <%= form.label :phone, style: "display: block" %>
-    <%= form.text_field :phone %>
+  <div class="mb-3">
+    <%= form.label :phone, class: "form-label fw-medium" %>
+    <%= form.text_field :phone, class: "form-control", placeholder: "Enter phone number" %>
   </div>
 
-  <div>
-    <%= form.label :birthdate, style: "display: block" %>
-    <%= form.date_field :birthdate %>
+  <div class="mb-3">
+    <%= form.label :birthdate, class: "form-label fw-medium" %>
+    <%= form.date_field :birthdate, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :address, style: "display: block" %>
-    <%= form.text_field :address %>
+  <div class="mb-3">
+    <%= form.label :address, class: "form-label fw-medium" %>
+    <%= form.text_field :address, class: "form-control", placeholder: "Enter address" %>
   </div>
 
-  <div>
-    <%= form.label :postal_code, style: "display: block" %>
-    <%= form.text_field :postal_code %>
+  <div class="mb-3">
+    <%= form.label :postal_code, class: "form-label fw-medium" %>
+    <%= form.text_field :postal_code, class: "form-control", placeholder: "Enter postal code" %>
   </div>
 
-  <div>
-    <%= form.label :neighborhood, style: "display: block" %>
-    <%= form.text_field :neighborhood %>
+  <div class="mb-3">
+    <%= form.label :neighborhood, class: "form-label fw-medium" %>
+    <%= form.text_field :neighborhood, class: "form-control", placeholder: "Enter neighborhood" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+    <%= link_to "Cancel", clients_path, class: "btn btn-outline-secondary me-md-2" if defined?(clients_path) %>
+    <%= form.submit class: "btn btn-success" %>
   </div>
 <% end %>
