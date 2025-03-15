@@ -1,0 +1,53 @@
+<%= form_with(model: client, class: "card shadow-sm p-4 mb-4") do |form| %>
+  <% if client.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><i class="bi bi-exclamation-triangle-fill me-2"></i><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h5>
+
+      <ul class="mb-0 mt-2">
+        <% client.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label fw-medium" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Enter name" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :cpf, class: "form-label fw-medium" %>
+    <%= form.text_field :cpf, class: "form-control", placeholder: "Enter CPF" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :phone, class: "form-label fw-medium" %>
+    <%= form.text_field :phone, class: "form-control", placeholder: "Enter phone number" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :birthdate, class: "form-label fw-medium" %>
+    <%= form.date_field :birthdate, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :address, class: "form-label fw-medium" %>
+    <%= form.text_field :address, class: "form-control", placeholder: "Enter address" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :postal_code, class: "form-label fw-medium" %>
+    <%= form.text_field :postal_code, class: "form-control", placeholder: "Enter postal code" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :neighborhood, class: "form-label fw-medium" %>
+    <%= form.text_field :neighborhood, class: "form-control", placeholder: "Enter neighborhood" %>
+  </div>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+    <%= link_to "Cancel", clients_path, class: "btn btn-outline-secondary me-md-2" if defined?(clients_path) %>
+    <%= form.submit class: "btn btn-success" %>
+  </div>
+<% end %>

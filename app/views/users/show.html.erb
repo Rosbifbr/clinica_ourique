@@ -1,0 +1,10 @@
+<%= render @user %>
+
+<div>
+  <%= button_to "Edit this user", edit_user_path(@user) , method: :get , class: "btn btn-sm" %>
+  <%= button_to "Destroy this user", @user, method: :delete , class: "btn btn-sm" %>
+</div>
+
+<br>
+
+<%= button_to "Back to users", users_path , method: :get , class: "btn btn-sm" %>

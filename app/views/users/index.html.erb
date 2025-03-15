@@ -1,0 +1,36 @@
+<% content_for :title, "Users" %>
+
+<h1>Users</h1>
+
+<%= form_tag(users_path, method: :get) do %>
+  <%= label_tag :search, "Search Users" %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search by name" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<br>
+
+<table class="table" border = "1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+          <td><%= link_to user.name, user_path(user) %></td>
+          <td>
+            <div class="button-group">
+                <%= button_to 'Show', user_path(user), method: :get, class: "btn btn-secondary btn-sm" %>
+                <%= button_to 'Edit', edit_user_path(user), method: :get, class: "btn btn-light btn-sm" %>
+                <%= button_to 'Delete', user_path(user), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-light btn-sm" %>
+            </div>
+          </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= button_to "Add New User", new_user_path, method: :get , class: "btn btn-sm" %>

@@ -1,0 +1,45 @@
+<h1>Clients</h1>
+
+<%= form_tag(clients_path, method: :get) do %>
+  <%= label_tag :search, "Search Clients" %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search by name or CPF" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>CPF</th>
+      <th>Phone</th>
+      <th>Birthdate</th>
+      <th>Address</th>
+      <th>Postal Code</th>
+      <th>Neighborhood</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @clients.each do |client| %>
+      <tr>
+          <td><%= link_to client.name, client_path(client) %></td>
+          <td><%= client.cpf %></td>
+          <td><%= client.phone %></td>
+          <td><%= client.birthdate %></td>
+          <td><%= client.address %></td>
+          <td><%= client.postal_code %></td>
+          <td><%= client.neighborhood %></td>
+          <td>
+            <div class="button-group">
+                <%= button_to 'Show', client_path(client), method: :get, class: "btn btn-secondary btn-sm" %>
+                <%= button_to 'Edit', edit_client_path(client), method: :get, class: "btn btn-light btn-sm" %>
+                <%= button_to 'Delete', client_path(client), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-light btn-sm" %>
+            </div>
+          </td>
+    <% end %>
+  </tbody>
+</table>
+
+<%= button_to "Add New Client", new_client_path ,  method: :get , class: "btn btn-sm" %>

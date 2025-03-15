@@ -1,0 +1,20 @@
+<h1><%= @client.name %></h1>
+<p>Email: <%= @client.cpf %></p>
+<p>Phone: <%= @client.phone %></p>
+<p>Birthdate: <%= @client.birthdate %></p>
+<p>Address: <%= @client.address %></p>
+<p>Postal Code: <%= @client.postal_code %></p>
+<p>Neighborhood: <%= @client.neighborhood %></p>
+
+<%= link_to 'Edit Client', edit_client_path(@client) %> |
+<%= link_to 'Back to Clients', clients_path %>
+
+<h2>Procedures</h2>
+
+
+
+<h3>Add a Procedure</h3>
+
+
+
+<h3>Existing Procedures</h3>

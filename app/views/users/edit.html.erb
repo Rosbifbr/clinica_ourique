@@ -1,0 +1,12 @@
+<% content_for :title, "Editing user" %>
+
+<h1>Editing user</h1>
+
+<%= render "form", user: @user %>
+
+<br><br>
+
+<div>
+  <%= button_to "Show this user", @user , method: :get , class: "btn btn-sm" %>
+  <%= button_to "Back to users", users_path , method: :get , class: "btn btn-sm" %>
+</div>

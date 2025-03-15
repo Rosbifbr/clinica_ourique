@@ -1,15 +1,15 @@
-name: "clinica_ourique"
+name: "co"
 
 services:
-  rails-app:
+  app:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
 
     volumes:
-      - ..:/workspaces:cached
-      - bundle:/usr/local/bundle
-      - rails_cache:/rails/tmp/cache
+      - ..:/rails:z
+      - bundle:/usr/local/bundle:z
+      - rails_cache:/rails/tmp/cache:z
 
     environment:
       RAILS_ENV: development
