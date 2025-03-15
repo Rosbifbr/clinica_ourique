@@ -7,9 +7,9 @@ services:
       dockerfile: .devcontainer/Dockerfile
 
     volumes:
-      - ..:/rails
-      - bundle:/usr/local/bundle
-      - rails_cache:/rails/tmp/cache
+      - ..:/rails:z
+      - bundle:/usr/local/bundle:z
+      - rails_cache:/rails/tmp/cache:z
 
     environment:
       RAILS_ENV: development
