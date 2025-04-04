@@ -1,11 +1,5 @@
 <% content_for :title, "New client" %>
 
-<h1>New client</h1>
+<h1 class="text-center"><i class="bi bi-person-plus me-2"></i>New Client</h1> <br>
 
 <%= render "form", client: @client %>
-
-<br>
-
-<div>
-  <%= link_to "Back to clients", clients_path %>
-</div>

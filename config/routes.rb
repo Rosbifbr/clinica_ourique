@@ -5,7 +5,13 @@ Rails.application.routes.draw do
     get "sign_out", to: "sessions#destroy"
 
   resources :users
-  resources :clients
+  resources :clients do
+    resources :procedures
+  end
+  resources :procedures, except: [:index]
+
+  post '/clients/:id/reset_odontogram', to: 'clients#reset_odontogram', as: 'reset_client_odontogram'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

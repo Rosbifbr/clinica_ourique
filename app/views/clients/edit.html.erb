@@ -1,12 +1,19 @@
 <% content_for :title, "Editing client" %>
 
-<h1>Editing client</h1>
+<div class="d-flex justify-content-center">
+  <div class="text-center">
+    <h2 class="mb-1">
+      <i class="bi bi-pencil-square me-2"></i>Editing Client
+    </h2>
+  </div>
+</div>
 
 <%= render "form", client: @client %>
 
-<br>
-
-<div>
-  <%= link_to "Show this client", @client %> |
-  <%= link_to "Back to clients", clients_path %>
+<div class="d-flex justify-content-center">
+  <div class="text-center">
+        <%= link_to client_path(@client), class: "btn btn-outline-primary mt-4" do %>
+            <i class="bi bi-eye me-1"></i>View Client
+        <% end %>
+  </div>
 </div>

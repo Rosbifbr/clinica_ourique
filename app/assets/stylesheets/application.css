@@ -10,154 +10,214 @@
  */
 
 :root {
-  --clinic-primary: #198754;
-  --clinic-secondary: #0d6efd;
-  --clinic-dark: #145c39;
-  --clinic-light: #f8f9fa;
+    --clinic-light: #f8f9fa;
+    --clinic-primary: #198754;
+    --clinic-primary-dark: #145c39;
+    --clinic-secondary: #0d6efd;
+    --clinic-secondary-dark: #0a4d8c;
+    --clinic-warning: #ffc107;
+    --clinic-warning-dark: #d6a206;
+    --clinic-danger: #dc3545;
+    --clinic-danger-dark: #bb2d3b;
 }
 
 body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 table.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid #dee2e6; /* Softer border color */
-  border-radius: 0.5rem !important; /* More pronounced rounding */
-  overflow: hidden; /* Ensures content respects border-radius */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  background-color: #fff; /* Clean white background */
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #dee2e6; /* Softer border color */
+    border-radius: 0.5rem !important; /* More pronounced rounding */
+    overflow: hidden; /* Ensures content respects border-radius */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    background-color: #fff; /* Clean white background */
 }
 
 table.table th {
-  border: 1px solid #dee2e6 !important;
-  padding: 20px !important; /* More spacious padding */
-  background: linear-gradient(135deg, #198754 0%, #157347 100%) !important; /* Sexy gradient */
-  color: white !important;
-  font-weight: 600; /* Bolder text */
-  text-transform: uppercase; /* Adds sophistication */
-  letter-spacing: 0.5px; /* Better spacing */
+    border: 1px solid #dee2e6 !important;
+    padding: 20px !important; /* More spacious padding */
+    background: linear-gradient(
+        135deg,
+        #198754 0%,
+        #157347 100%
+    ) !important; /* Sexy gradient */
+    color: white !important;
+    font-weight: 600; /* Bolder text */
+    text-transform: uppercase; /* Adds sophistication */
+    letter-spacing: 0.5px; /* Better spacing */
 }
 
 table.table td {
-  border-left: 1px solid #dee2e6 !important;
-  border-right: 1px solid #dee2e6 !important;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  padding: 20px !important;
-  transition: background-color 0.2s ease; /* Smooth hover effect */
+    border-left: 1px solid #dee2e6 !important;
+    border-right: 1px solid #dee2e6 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    padding: 20px !important;
+    transition: background-color 0.2s ease; /* Smooth hover effect */
 }
 
 /* Row borders */
 table.table tr {
-  border-bottom: 1px solid #dee2e6 !important;
+    border-bottom: 1px solid #dee2e6 !important;
 }
 
 /* Fix first and last rows */
 table.table tr:first-child td {
-  border-top: 1px solid #dee2e6 !important;
+    border-top: 1px solid #dee2e6 !important;
 }
 
 table.table tr:last-child td {
-  border-bottom: 0 !important; /* Clean edge at bottom */
+    border-bottom: 0 !important; /* Clean edge at bottom */
 }
 
 /* Sexy hover effect */
 table.table tbody tr:hover {
-  background-color: rgba(25, 135, 84, 0.05); /* Subtle green tint */
+    background-color: rgba(25, 135, 84, 0.05); /* Subtle green tint */
 }
 
-/* Round the corners properly */
 table.table th:first-child {
-  border-top-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
 }
 
 table.table th:last-child {
-  border-top-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 table.table tr:last-child td:first-child {
-  border-bottom-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
 }
 
 table.table tr:last-child td:last-child {
-  border-bottom-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 .navbar {
-  background-color: var(--clinic-primary) !important;
+    background-color: var(--clinic-primary) !important;
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-}
-
-.btn-primary {
-  background-color: var(--clinic-primary);
-  border-color: var(--clinic-primary);
-}
-
-.btn-primary:hover {
-  background-color: var(--clinic-dark);
-  border-color: var(--clinic-dark);
-}
-
-.btn-outline-primary {
-  color: var(--clinic-primary);
-  border-color: var(--clinic-primary);
-}
-
-.btn-outline-primary:hover {
-  background-color: var(--clinic-primary);
-  border-color: var(--clinic-primary);
+    font-size: 1.5rem;
 }
 
 .text-primary {
-  color: var(--clinic-primary) !important;
+    color: var(--clinic-primary) !important;
 }
 
 .bg-primary {
-  background-color: var(--clinic-primary) !important;
+    background-color: var(--clinic-primary) !important;
 }
 
 .footer {
-  background-color: var(--clinic-primary) !important;
-  margin-top: auto;
+    background-color: var(--clinic-primary) !important;
+    margin-top: auto;
 }
 
 .card {
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.button-group {
+    display: inline-flex;
+    gap: 10px;
+}
+
+.info-group:hover {
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.input-group:hover .input-group-text {
+    background-color: #e9ecef;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.input-group:focus-within .input-group-text {
+    background-color: #e9ecef;
+    border-color: #86b7fe;
+}
+
+.btn-primary {
+    background-color: var(--clinic-primary);
+    border-color: var(--clinic-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--clinic-primary-dark);
+    border-color: var(--clinic-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--clinic-primary);
+    border-color: var(--clinic-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--clinic-primary);
+    border-color: var(--clinic-primary);
+}
+
+.btn-secondary {
+    background-color: var(--clinic-secondary);
+    border-color: var(--clinic-secondary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--clinic-secondary-dark);
+    border-color: var(--clinic-secondary-dark);
+}
+
+.btn-warning {
+    background-color: var(--clinic-warning);
+    border-color: var(--clinic-warning);
+}
+
+.btn-warning:hover {
+    background-color: var(--clinic-warning-dark);
+    border-color: var(--clinic-warning-dark);
+}
+
+.btn-danger {
+    background-color: var(--clinic-danger);
+    border-color: var(--clinic-danger);
+}
+
+btn-danger:hover {
+    background-color: var(--clinic-danger-dark);
+    border-color: var(--clinic-danger-dark);
+}
+
+.observation-content {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 /* Legacy styles maintained for backward compatibility */
 .top-right {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .top-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .top-button {
-  margin-right: 10px;
-}
-
-.button-group {
-  display: inline-flex;
-  gap: 10px;
+    margin-right: 10px;
 }

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  procedure_type: MyString
+  observation: MyText
+  date: 2025-03-21
+  teeth: MyString
+
+two:
+  procedure_type: MyString
+  observation: MyText
+  date: 2025-03-21
+  teeth: MyString

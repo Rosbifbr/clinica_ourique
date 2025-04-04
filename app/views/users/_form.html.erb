@@ -1,28 +1,74 @@
-<%= form_with(model: user, class: "card shadow-sm p-4 mb-4") do |form| %>
-  <% if user.errors.any? %>
-    <div class="alert alert-danger">
-      <h5><i class="bi bi-exclamation-triangle-fill me-2"></i><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-5">
+      <%= form_with(model: user, class: "card shadow-lg") do |form| %>
+        <div class="card-header bg-primary bg-gradient text-white py-3">
+          <h4 class="card-title mb-0">
+            <i class="bi bi-person-circle me-2"></i>
+            <%= user.new_record? ? "Create User" : "Edit User" %>
+          </h4>
+        </div>
 
-      <ul class="mb-0 mt-2">
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <div class="card-body p-4">
+          <% if user.errors.any? %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <h6 class="mb-0"><%= pluralize(user.errors.count, "error") %> prohibited this account from being saved:</h6>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <ul class="mb-0 mt-2">
+                <% user.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="mb-4">
+            <%= form.label :name, class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person"></i>
+              </span>
+              <%= form.text_field :name,
+                  class: "form-control",
+                  placeholder: "Enter your name",
+                  autocomplete: "name" %>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <%= form.label :password, class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-key"></i>
+              </span>
+              <%= form.password_field :password,
+                  class: "form-control",
+                  placeholder: "Enter your password",
+                  autocomplete: "new-password" %>
+            </div>
+            <div class="form-text text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Password should be at least 6 characters long
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-light p-3">
+          <div class="d-flex justify-content-center gap-3">
+            <% if defined?(users_path) %>
+              <%= link_to users_path, class: "btn btn-outline-secondary" do %>
+                <i class="bi bi-x-circle me-1"></i>Cancel
+              <% end %>
+            <% end %>
+            <%= form.submit class: "btn btn-primary", value: user.new_record? ? "Create User" : "Update Account" do %>
+              <i class="bi bi-check-circle me-1"></i>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-
-  <div class="mb-3">
-    <%= form.label :name, class: "form-label fw-medium" %>
-    <%= form.text_field :name, class: "form-control", placeholder: "Enter name" %>
   </div>
-
-  <div class="mb-3">
-    <%= form.label :password, class: "form-label fw-medium" %>
-    <%= form.password_field :password, class: "form-control", placeholder: "Enter password" %>
-  </div>
-
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-    <%= link_to "Cancel", users_path, class: "btn btn-outline-secondary me-md-2" if defined?(users_path) %>
-    <%= form.submit class: "btn btn-success" %>
-  </div>
-<% end %>
+</div>

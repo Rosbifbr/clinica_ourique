@@ -34,18 +34,18 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarNav">
           <% if user_signed_in? %>
             <ul class="navbar-nav ms-auto">
-              <% unless request.path == clients_path %>
+              <% unless request.path == clients_path || request.path == root_path %>
                 <li class="nav-item">
                   <%= link_to clients_path, class: "nav-link" do %>
                     <i class="bi bi-people me-1"></i> Clients
                   <% end %>
                 </li>
               <% end %>
-              
+
               <% unless request.path == users_path || request.path == sign_in_path %>
                 <li class="nav-item">
                   <%= link_to users_path, class: "nav-link" do %>
@@ -53,7 +53,7 @@
                   <% end %>
                 </li>
               <% end %>
-              
+
               <li class="nav-item">
                 <%= button_to sign_out_path, method: :get, class: "btn btn-outline-light ms-2" do %>
                   <i class="bi bi-box-arrow-right me-1"></i> Log Out
@@ -72,14 +72,17 @@
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <% end %>
-      
+
       <%= yield %>
     </div>
 
     <footer class="footer mt-5 py-3 bg-success text-white">
-      <div class="container text-center">
+      <div class="container-fluid text-center">
         <small>&copy; <%= Date.today.year %> Clinica Ourique. All rights reserved.</small>
       </div>
     </footer>
+
+    <!-- Global Delete Modal -->
+    <%= render "shared/delete_modal" %>
   </body>
 </html>

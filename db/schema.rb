@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_15_185104) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_27_175401) do
   create_table "clients", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "cpf", null: false
+    t.string "name"
+    t.string "cpf"
     t.string "phone"
     t.date "birthdate"
     t.string "address"
@@ -21,14 +21,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_185104) do
     t.string "neighborhood"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["cpf"], name: "index_clients_on_cpf", unique: true
-    t.index ["name"], name: "index_clients_on_name"
+    t.string "odontogram_path"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "password", null: false
+  create_table "procedure_types", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "procedures", force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.text "observation"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "teeth"
+    t.integer "procedure_type_id"
+    t.index ["client_id"], name: "index_procedures_on_client_id"
+    t.index ["procedure_type_id"], name: "index_procedures_on_procedure_type_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "procedures", "clients"
+  add_foreign_key "procedures", "procedure_types"
 end

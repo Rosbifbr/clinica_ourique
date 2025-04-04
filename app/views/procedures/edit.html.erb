@@ -1,0 +1,14 @@
+<% content_for :title, "Editing procedure" %>
+
+<h1 class="text-center"><i class="bi bi-file-earmark-plus me-2"></i></i>Edit Procedure</h1> <br>
+
+<%= render "form", procedure: @procedure %>
+
+
+<div class="d-flex justify-content-center">
+  <div class="text-center">
+        <%= link_to procedure_path(@procedure), class: "btn btn-outline-primary mt-4" do %>
+            <i class="bi bi-eye me-1"></i>View Procedure
+        <% end %>
+  </div>
+</div>

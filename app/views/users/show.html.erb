@@ -1,10 +1,9 @@
-<%= render @user %>
+<div class="container mt-4">
+  <%= render @user %>
 
-<div>
-  <%= button_to "Edit this user", edit_user_path(@user) , method: :get , class: "btn btn-sm" %>
-  <%= button_to "Destroy this user", @user, method: :delete , class: "btn btn-sm" %>
+  <div class="d-flex justify-content-center gap-2 mt-4">
+    <%= button_to users_path, method: :get, class: "btn btn-outline-primary mt-4" do %>
+      <i class="bi bi-arrow-left me-1"></i>Back to Users
+    <% end %>
+  </div>
 </div>
-
-<br>
-
-<%= button_to "Back to users", users_path , method: :get , class: "btn btn-sm" %>

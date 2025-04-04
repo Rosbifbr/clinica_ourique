@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(name: params[:name])
-    if user && user.password == params[:password]  # Simplified password check
+    if user && user.password.to_s == params[:password].to_s  # Simplified password check
       session[:user_id] = user.id
       redirect_to root_path, notice: "Signed in successfully!"
     else

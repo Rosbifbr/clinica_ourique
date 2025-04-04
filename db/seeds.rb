@@ -7,3 +7,19 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+procedure_types = [
+  'Cleaning',
+  'Extraction',
+  'Filling',
+  'Root Canal',
+  'Crown',
+  'Whitening',
+  'Check-up',
+  'X-Ray'
+]
+
+procedure_types.each do |type|
+  ProcedureType.find_or_create_by(name: type)
+end
