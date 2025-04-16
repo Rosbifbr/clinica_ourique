@@ -1,6 +1,6 @@
 <div class="container-fluid mt-4">
   <div class="row justify-content-center">
-    <div class="col-12 col-xl-15"> <!-- Main Card Size -->
+    <div class="col-12 col-xl-12"> <!-- Main Card Size -->
       <div class="card shadow-lg mb-4">
         <!-- Title -->
         <div class="card-header bg-primary bg-gradient text-white py-3 d-flex justify-content-between align-items-center">
@@ -27,7 +27,7 @@
         <div class="card-body p-4">
           <div class="row g-4">
             <div class="col-12">
-              <h3 class="border-bottom pb-2 mb-3"><%= @client.name %></h3>
+              <h1 class="border-bottom pb-2 mb-3"><%= @client.name %></h1>
             </div>
 
             <div class="col-md-6">
@@ -64,134 +64,182 @@
               </div>
             </div>
 
-            <!-- Client Observation-->
-            <div class="col-12 mt-2">
-              <div class="card border-0 bg-light">
+            <!-- Client Observation -->
+            <div class="mt-4">
+              <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h4 class="mb-0">
+                  <i class="bi bi-journal-text me-2"></i>Client Observation
+                </h4>
+              </div>
+
+              <% if @client.observation.blank? %>
+                <div class="alert alert-info d-flex align-items-center">
+                  <i class="bi bi-info-circle me-2 fs-5"></i>
+                  <div>No observation found for this client. Click "Edit" to add one.</div>
+                </div>
+              <% else %>
+                <div class="bg-light p-3 rounded border-start border-success border-3">
+                  <div class="d-flex align-items-start">
+                    <i class="fs-4"></i>
+                    <p class="mb-0 text-dark lh-base"><%= @client.observation %></p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Odontogram Section -->
+            <div class="mt-4">
+              <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h4 class="mb-0">
+                  <i class="bi bi-grid-3x3-gap me-2"></i>Odontogram
+                </h4>
+                <div>
+                  <%= link_to edit_client_path(@client, anchor: "odontogram"), class: "btn btn-secondary" do %>
+                    <i class="bi bi-pencil me-1"></i>Edit Odontogram
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
-                  <h5 class="card-title">
-                    <i class="bi bi-journal-text me-2"></i>Client Observations
-                  </h5>
-                    <p class="card-text text-muted fst-italic">No observations recorded for this client.</p>
+                  <%= image_tag @client.odontogram_url, class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px" %>
+
+                  <% if @client.has_custom_odontogram? %>
+                    <div class="text-center mt-2">
+                      <span class="badge bg-info">Custom odontogram</span>
+                    </div>
+                  <% else %>
+                    <div class="text-center mt-2">
+                      <span class="badge bg-secondary">Default odontogram</span>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Odontogram Section -->
-          <div class="mt-4">
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-              <h4 class="mb-0">
-                <i class="bi bi-grid-3x3-gap me-2"></i>Odontogram
-              </h4>
-              <div>
-                <%= link_to edit_client_path(@client, anchor: "odontogram"), class: "btn btn-outline-primary" do %>
-                  <i class="bi bi-pencil me-1"></i>Edit Odontogram
-                <% end %>
+            <!-- Procedures -->
+            <div class="mt-4">
+              <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h4 class="mb-0">
+                  <i class="bi bi-clipboard2-pulse me-2"></i>Procedures
+                </h4>
+                <div>
+                  <%= link_to new_client_procedure_path(@client), class: "btn btn-primary" do %>
+                    <i class="bi bi-plus-circle me-1"></i>Add Procedure
+                  <% end %>
+                </div>
               </div>
-            </div>
 
-            <div class="card border-0 shadow-sm mb-4">
-              <div class="card-body">
-                <%= image_tag @client.odontogram_url, class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px" %>
-
-                <% if @client.has_custom_odontogram? %>
-                  <div class="text-center mt-2">
-                    <span class="badge bg-info">Custom odontogram</span>
-                  </div>
-                <% else %>
-                  <div class="text-center mt-2">
-                    <span class="badge bg-secondary">Default odontogram</span>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-
-          <!-- Procedures -->
-          <div class="mt-4">
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-              <h4 class="mb-0">
-                <i class="bi bi-clipboard2-pulse me-2"></i>Procedures
-              </h4>
-              <div>
-                <%= link_to new_client_procedure_path(@client), class: "btn btn-primary" do %>
-                  <i class="bi bi-plus-circle me-1"></i>Add Procedure
-                <% end %>
-              </div>
-            </div>
-
-            <% if @procedures_for_client.any? %>
-              <div class="row g-3">
-                <% @procedures_for_client.order(created_at: :desc).each do |procedure| %>
-                  <div class="col-lg-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                      <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
-                        <span class="badge bg-primary px-3 py-2 rounded-pill fw-medium">
-                          <%= procedure.procedure_type.name rescue "Unknown Type" %>
-                        </span>
-                        <small class="text-muted fw-medium"><%= procedure.date&.strftime('%d/%m/%Y') || 'No date' %></small>
-                      </div>
-                      <div class="card-body p-3">
-                        <div class="procedure-details">
-                          <% if procedure.teeth.present? %>
-                            <div class="mb-3">
-                              <h6 class="text-muted mb-2 fw-bold small text-uppercase">
-                                <i class="bi bi-diagram-3 me-1"></i>Teeth
-                              </h6>
-                              <p class="mb-0 badge bg-light text-dark border px-2 py-1 fs-6"><%= procedure.teeth %></p>
-                            </div>
-                          <% end %>
-
-                          <% if procedure.observation.present? %>
-                            <div class="mb-2">
-                              <h6 class="text-muted mb-2 fw-bold small text-uppercase">
-                                <i class="bi bi-journal-text me-1"></i>Observation
-                              </h6>
-                              <div class="bg-light p-2 rounded border-start border-success border-3">
-                                <p class="mb-0 text-dark" style="max-height: 80px; overflow-y: auto;">
-                                  <%= procedure.observation %>
-                                </p>
-                              </div>
-                            </div>
-                          <% end %>
+              <% if @procedures_for_client.any? %>
+                <div class="row g-3">
+                  <% @procedures_for_client.order(created_at: :desc).each do |procedure| %>
+                    <div class="col-lg-6">
+                      <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                          <span class="badge bg-primary px-3 py-2 rounded-pill fw-medium">
+                            <%= procedure.procedure_type.name rescue "Unknown Type" %>
+                          </span>
+                          <small class="text-muted fw-medium"><%= procedure.date&.strftime('%d/%m/%Y') || 'No date' %></small>
                         </div>
-                      </div>
-                      <div class="card-footer bg-white border-top pt-2 pb-2">
-                        <div class="d-flex justify-content-end gap-2">
-                            <div class="card-footer bg-white border-0 d-flex justify-content-end gap-2 py-2">
-                              <%= link_to procedure_path(procedure), class: "btn btn-sm btn-primary ms-2" do %>
-                                <i class="bi bi-eye me-1"></i>View
-                              <% end %>
-                              <%= link_to edit_procedure_path(procedure), class: "btn btn-sm btn-secondary ms-2" do %>
-                                <i class="bi bi-pencil-square"></i>Edit
-                              <% end %>
-                              <button type="button" class="btn btn-sm btn-danger ms-2"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteModal"
-                                      data-item-name="Procedure"
-                                      data-item-type="procedure"
-                                      data-item-url="<%= procedure_path(procedure)%>">
-                                <i class="bi bi-trash-fill me-1"></i>Delete
-                              </button>
+                        <div class="card-body p-3">
+                          <div class="procedure-details">
+                            <% if procedure.teeth.present? %>
+                              <div class="mb-3">
+                                <h6 class="text-muted mb-2 fw-bold small text-uppercase">
+                                  <i class="bi bi-diagram-3 me-1"></i>Teeth
+                                </h6>
+                                <p class="mb-0 badge bg-light text-dark border px-2 py-1 fs-6"><%= procedure.teeth %></p>
+                              </div>
+                            <% end %>
+
+                            <% if procedure.observation.present? %>
+                              <div class="mb-2">
+                                <h6 class="text-muted mb-2 fw-bold small text-uppercase">
+                                  <i class="bi bi-journal-text me-1"></i>Observation
+                                </h6>
+                                <div class="bg-light p-2 rounded border-start border-success border-3">
+                                  <p class="mb-0 text-dark" style="max-height: 80px; overflow-y: auto;">
+                                    <%= procedure.observation %>
+                                  </p>
+                                </div>
+                              </div>
+                            <% end %>
+                          </div>
+                        </div>
+                        <div class="card-footer bg-white border-top pt-2 pb-2">
+                          <div class="d-flex justify-content-end gap-2">
+                            <%= link_to procedure_path(procedure), class: "btn btn-sm btn-primary ms-2" do %>
+                              <i class="bi bi-eye me-1"></i>View
+                            <% end %>
+                            <%= link_to edit_procedure_path(procedure), class: "btn btn-sm btn-secondary ms-2" do %>
+                              <i class="bi bi-pencil-square"></i>Edit
+                            <% end %>
+                            <button type="button" class="btn btn-sm btn-danger ms-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-item-name="Procedure"
+                                    data-item-type="procedure"
+                                    data-item-url="<%= procedure_path(procedure)%>">
+                              <i class="bi bi-trash-fill me-1"></i>Delete
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="alert alert-info d-flex align-items-center">
+                  <i class="bi bi-info-circle me-2 fs-5"></i>
+                  <div>No procedures found for this client. Click "Add Procedure" to create one.</div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Uploaded Images Section -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+              <h4 class="mb-0"><i class="bi bi-images me-2"></i>Uploaded Images</h4>
+            </div>
+            <% if @client.images.attached? %>
+              <div class="row">
+                <% @client.images.limit(3).each do |image| %>
+                  <div class="col-md-3 mb-3">
+                      <%= link_to image_tag(image, class: "img-fluid rounded", style: "max-height: 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"), "#",
+                            data: {
+                              bs_toggle: "modal",
+                              bs_target: "#fullImageModal",
+                              bs_image_url: url_for(image),
+                              bs_image_name: image.filename.to_s,
+                              bs_image_id: image.id,
+                              bs_client_id: @client.id
+                            }
+                      %>
+                  </div>
+                <% end %>
+                <% if @client.images.count > 3 %>
+                  <div class="col-md-3 mb-3 d-flex align-items-center justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#allImagesModal">
+                      View All Images
+                    </button>
                   </div>
                 <% end %>
               </div>
             <% else %>
               <div class="alert alert-info d-flex align-items-center">
                 <i class="bi bi-info-circle me-2 fs-5"></i>
-                <div>No procedures found for this client. Click "Add Procedure" to create one.</div>
+                <div>No images uploaded for this client. Click "Edit" to upload one.</div>
               </div>
             <% end %>
-          </div>
-        <!-- Base -->
+            </div>
+        </div>
+
         <div class="card-footer bg-light p-3">
-          <div class="d-flex justify-content-start">
-            <%= link_to clients_path, class: "btn btn-outline-secondary" do %>
-              <i class="bi bi-arrow-left me-1"></i>Back to Clients
-            <% end %>
+          <div class="d-flex justify-content-end gap-2">
+              <%= link_to clients_path, class: "btn btn-outline-secondary" do %>
+                <i class="bi bi-arrow-left me-1"></i>Back to Clients
+              <% end %>
           </div>
         </div>
       </div>

@@ -1,0 +1,134 @@
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-3">
+      <div class="modal-header bg-danger text-white d-flex justify-content-center position-relative">
+        <h5 class="modal-title fw-bold" id="deleteModalLabel">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete <span id="deleteItemName"></span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <p class="fs-5 text-muted mb-4">
+          Are you sure you want to delete this <span id="deleteItemType"></span>? <br>This action <strong>cannot</strong> be undone.
+        </p>
+      </div>
+      <div class="modal-footer d-flex justify-content-center border-0 pb-4">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <form id="deleteForm" method="post" action="">
+          <input type="hidden" name="_method" value="delete">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <button type="submit" class="btn btn-danger px-4">
+            <i class="bi bi-trash-fill me-1"></i> Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Reset Confirmation Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-3">
+      <div class="modal-header bg-danger text-white d-flex justify-content-center position-relative">
+        <h5 class="modal-title fw-bold" id="resetModalLabel">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>Reset <span id="resetItemName"></span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <p class="fs-5 text-muted mb-4">
+          Are you sure you want to reset this <span id="resetItemType"></span>? <br>This action <strong>cannot</strong> be undone.
+        </p>
+      </div>
+      <div class="modal-footer d-flex justify-content-center border-0 pb-4">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <form id="resetForm" method="post" action="">
+          <input type="hidden" name="_method" value="reset">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <button type="submit" class="btn btn-danger px-4">
+            <i class="bi bi-trash-fill me-1"></i> Reset
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for showing ALL uploaded images -->
+<% if defined?(@client) && @client.present? %>
+  <div class="modal fade" id="allImagesModal" tabindex="-1" aria-labelledby="allImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-3">
+        <div class="modal-header bg-primary text-white d-flex justify-content-center position-relative">
+          <h5 class="modal-title fw-bold" id="allImagesModalLabel">
+            <i class="bi bi-images me-2"></i>All Uploaded Images
+          </h5>
+          <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <% @client.images.each do |image| %>
+              <div class="col-md-4 mb-3">
+                <%= link_to image_tag(image, class: "img-fluid rounded", style: "max-height: 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"), "#", data: { bs_toggle: "modal", bs_target: "#fullImageModal", bs_image_url: url_for(image), bs_image_name: image.filename.to_s, bs_image_id: image.id, bs_client_id: @client.id } %>
+              </div>
+            <% end %>
+          </div>
+          <div class="mt-4">
+            <%= form_with(model: @client, local: true, html: { multipart: true }) do |form| %>
+              <div class="mb-3">
+                <%= form.file_field :images, multiple: true, class: "form-control" %>
+              </div>
+              <div class="d-flex justify-content-end">
+                <%= form.submit "Upload Images", class: "btn btn-primary" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center border-0 pb-4">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Viewing Full-Resolution Image -->
+  <div class="modal fade" id="fullImageModal" tabindex="-1" aria-labelledby="fullImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-3">
+        <div class="modal-header bg-primary text-white d-flex justify-content-center position-relative">
+          <h5 class="modal-title fw-bold" id="fullImageModalLabel">
+            <i class="bi bi-image me-2"></i>Image
+          </h5>
+          <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <!-- This will be populated by JavaScript -->
+          <div id="fullImageContainer"></div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between border-0 pb-4">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Close
+          </button>
+          <button type="button" class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteModal"
+                  data-item-name="Image"
+                  data-item-type="image"
+                  data-item-url=""
+                  id="triggerDeleteModal">
+            <i class="bi bi-trash-fill me-1"></i> Delete Image
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

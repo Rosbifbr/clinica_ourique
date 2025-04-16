@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-  before_action :set_client, only: [:show, :edit, :update, :destroy]
+  before_action :set_client, only: [:show, :edit, :update, :destroy, :destroy_image]
 
   # GET /clients or /clients.json
   def index
@@ -66,6 +66,12 @@ class ClientsController < ApplicationController
     params[:client].delete(:odontogram_action)
     params[:client].delete(:odontogram_image)
 
+    if params[:client][:images]
+      params[:client][:images].each do |image|
+        @client.images.attach(image)
+      end
+    end
+
     respond_to do |format|
       if @client.update(client_params)
         format.html { redirect_to client_url(@client), notice: "Client was successfully updated." }
@@ -101,6 +107,17 @@ class ClientsController < ApplicationController
     end
   end
 
+  # DELETE /clients/1/images/:image_id
+  def destroy_image
+    image = @client.images.find(params[:image_id])
+    image.purge
+
+    respond_to do |format|
+      format.html { redirect_to @client, notice: 'Image was successfully deleted.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -110,6 +127,6 @@ class ClientsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood, :observation, :odontogram_path)
+    params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood, :observation, :odontogram_path, images: [])
   end
 end

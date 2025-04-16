@@ -9,6 +9,10 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+/*
+*= require bootstrap
+*/
+
 :root {
     --clinic-light: #f8f9fa;
     --clinic-primary: #198754;

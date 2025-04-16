@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   resources :users
   resources :clients do
+    member do
+      delete 'images/:image_id', to: 'clients#destroy_image', as: 'destroy_image'
+    end
     resources :procedures
   end
   resources :procedures, except: [:index]

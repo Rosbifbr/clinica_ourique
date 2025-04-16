@@ -1,6 +1,8 @@
 class Client < ApplicationRecord
-  has_many :procedures
+  has_many :procedures, dependent: :destroy
   validates :odontogram_path, allow_blank: true, format: { with: /\A[a-zA-Z0-9_\-\.]+\z/, message: "contains invalid characters" }
+
+  has_many_attached :images, dependent: :destroy
 
   def odontogram_url
     if odontogram_path.present?
