@@ -1,0 +1,11 @@
+<% content_for :title, "New billing" %>
+
+<h1>New billing</h1>
+
+<%= render "form", billing: @billing %>
+
+<br>
+
+<div>
+  <%= link_to "Back to billings", billings_path %>
+</div>

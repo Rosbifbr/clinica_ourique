@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :billings
+  resources :operations
   root "clients#index"  # Sign-in page as the root
     get "sign_in", to: "sessions#new"
     post "sign_in", to: "sessions#create"

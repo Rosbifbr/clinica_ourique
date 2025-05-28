@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one # This refers to the 'one' client fixture
+  description: "Standard Cleaning"
+  date: <%= Date.today - 7.days %>
+  cost: 150.00
+  status: "Completed"
+
+two:
+  client: two # This refers to the 'two' client fixture
+  description: "X-Ray and Consultation"
+  date: <%= Date.today - 3.days %>
+  cost: 75.50
+  status: "Scheduled"

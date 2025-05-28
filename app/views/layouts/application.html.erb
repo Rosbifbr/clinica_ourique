@@ -46,6 +46,24 @@
                 </li>
               <% end %>
               
+              <%# Link to Operations %>
+              <% unless request.path == operations_path %>
+                <li class="nav-item">
+                  <%= link_to operations_path, class: "nav-link" do %>
+                    <i class="bi bi-journal-medical me-1"></i> Operations
+                  <% end %>
+                </li>
+              <% end %>
+
+              <%# Link to Billings %>
+              <% unless request.path == billings_path %>
+                <li class="nav-item">
+                  <%= link_to billings_path, class: "nav-link" do %>
+                    <i class="bi bi-receipt me-1"></i> Billings
+                  <% end %>
+                </li>
+              <% end %>
+
               <% unless request.path == users_path || request.path == sign_in_path %>
                 <li class="nav-item">
                   <%= link_to users_path, class: "nav-link" do %>

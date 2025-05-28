@@ -1,0 +1,45 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @operation %>
+
+<div>
+  <%= link_to "Edit this operation", edit_operation_path(@operation), class: "btn btn-secondary btn-sm" %> |
+  <%= link_to "Back to operations", operations_path, class: "btn btn-light btn-sm" %>
+
+  <%= button_to "Destroy this operation", @operation, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+</div>
+
+<hr>
+
+<h2>Billings for this Operation</h2>
+
+<%= link_to 'Add New Bill for this Operation', new_billing_path(client_id: @operation.client_id, operation_id: @operation.id), class: "btn btn-primary btn-sm mb-3" %>
+
+<% if @operation.billings.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @operation.billings.order(due_date: :asc).each do |billing| %>
+        <tr>
+          <td><%= number_to_currency(billing.amount) %></td>
+          <td><%= billing.due_date.strftime("%Y-%m-%d") if billing.due_date %></td>
+          <td><%= billing.status %></td>
+          <td>
+            <%= link_to 'Show', billing_path(billing), class: "btn btn-info btn-sm" %>
+            <%= link_to 'Edit', edit_billing_path(billing), class: "btn btn-secondary btn-sm" %>
+            <%= button_to 'Delete', billing_path(billing), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No billings recorded for this operation yet.</p>
+<% end %>

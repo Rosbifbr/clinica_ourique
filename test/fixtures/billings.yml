@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# All entries commented out to ensure model tests create their own data
+# and are not affected by fixture loading issues for billings.
+# one:
+#   client: one
+#   # operation: one # operation_id is nullable
+#   amount: 99.99
+#   due_date: <%= Date.today + 7.days %>
+#   status: 'Pending'
+#
+# two:
+#   client: two
+#   operation: nil
+#   amount: 149.50
+#   due_date: <%= Date.today + 10.days %>
+#   status: 'Draft'

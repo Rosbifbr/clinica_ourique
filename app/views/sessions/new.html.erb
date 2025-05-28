@@ -2,8 +2,8 @@
   <h1>Sign In</h1>
   <%= form_with url: sign_in_path, method: :post, class: "mt-3" do %>
     <div class="mb-3">
-      <%= label_tag :name, nil, class: "form-label fw-medium" %>
-      <%= text_field_tag :name, nil, class: "form-control", placeholder: "Enter name" %>
+      <%= label_tag :email, nil, class: "form-label fw-medium" %>
+      <%= email_field_tag :email, nil, class: "form-control", placeholder: "Enter email" %>
     </div>
 
     <div class="mb-3">

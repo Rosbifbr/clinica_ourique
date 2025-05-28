@@ -72,6 +72,6 @@
 
       # Only allow a list of trusted parameters through.
       def client_params
-        params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood)
+        params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood, :dental_map_image_base64)
       end
   end

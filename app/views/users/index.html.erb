@@ -14,6 +14,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Email</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -21,6 +22,7 @@
     <% @users.each do |user| %>
       <tr>
           <td><%= link_to user.name, user_path(user) %></td>
+          <td><%= user.email %></td>
           <td>
             <div class="button-group">
                 <%= button_to 'Show', user_path(user), method: :get, class: "btn btn-secondary btn-sm" %>

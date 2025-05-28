@@ -6,15 +6,89 @@
 <p>Postal Code: <%= @client.postal_code %></p>
 <p>Neighborhood: <%= @client.neighborhood %></p>
 
+<% if @client.dental_map_image_base64.present? %>
+  <h2>Dental Map</h2>
+  <img src="data:image/png;base64,<%= @client.dental_map_image_base64 %>" alt="Dental Map" style="max-width: 100%; height: auto;">
+  <p><small><i>Note: The image is displayed from a Base64 encoded string.</i></small></p>
+<% else %>
+  <p>No dental map available.</p>
+  <p><small><i>Note: To add a dental map, please provide a Base64 encoded image string.</i></small></p>
+<% end %>
+
+<br>
+
 <%= link_to 'Edit Client', edit_client_path(@client) %> |
 <%= link_to 'Back to Clients', clients_path %>
 
-<h2>Procedures</h2>
+<hr>
 
+<h2>Operations</h2>
 
+<%= link_to 'Add New Operation', new_operation_path(client_id: @client.id), class: "btn btn-primary btn-sm mb-3" %>
 
-<h3>Add a Procedure</h3>
+<% if @client.operations.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Cost</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @client.operations.order(date: :desc).each do |operation| %>
+        <tr>
+          <td><%= link_to operation.description, operation_path(operation) %></td>
+          <td><%= operation.date.strftime("%Y-%m-%d") if operation.date %></td>
+          <td><%= number_to_currency(operation.cost) %></td>
+          <td><%= operation.status %></td>
+          <td>
+            <%= link_to 'Edit', edit_operation_path(operation), class: "btn btn-secondary btn-sm" %>
+            <%= button_to 'Delete', operation_path(operation), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No operations recorded for this client yet.</p>
+<% end %>
 
+<hr>
 
+<h2>Billings</h2>
 
-<h3>Existing Procedures</h3>
+<%= link_to 'Add New Bill', new_billing_path(client_id: @client.id), class: "btn btn-primary btn-sm mb-3" %>
+
+<% if @client.billings.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Operation</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @client.billings.order(due_date: :asc).each do |billing| %>
+        <tr>
+          <td><%= billing.operation.present? ? link_to(billing.operation.description, operation_path(billing.operation)) : "N/A" %></td>
+          <td><%= number_to_currency(billing.amount) %></td>
+          <td><%= billing.due_date.strftime("%Y-%m-%d") if billing.due_date %></td>
+          <td><%= billing.status %></td>
+          <td>
+            <%= link_to 'Show', billing_path(billing), class: "btn btn-info btn-sm" %>
+            <%= link_to 'Edit', edit_billing_path(billing), class: "btn btn-secondary btn-sm" %>
+            <%= button_to 'Delete', billing_path(billing), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No billings recorded for this client yet.</p>
+<% end %>

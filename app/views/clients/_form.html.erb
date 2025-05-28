@@ -46,6 +46,12 @@
     <%= form.text_field :neighborhood, class: "form-control", placeholder: "Enter neighborhood" %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label :dental_map_image_base64, "Dental Map (Base64)", class: "form-label fw-medium" %>
+    <%= form.text_area :dental_map_image_base64, class: "form-control", rows: 5, placeholder: "Paste Base64 encoded image data here" %>
+    <small class="form-text text-muted">Ensure the input is a Base64 encoded image string.</small>
+  </div>
+
   <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
     <%= link_to "Cancel", clients_path, class: "btn btn-outline-secondary me-md-2" if defined?(clients_path) %>
     <%= form.submit class: "btn btn-success" %>

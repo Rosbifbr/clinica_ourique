@@ -17,8 +17,18 @@
   </div>
 
   <div class="mb-3">
-    <%= form.label :password, class: "form-label fw-medium" %>
+    <%= form.label :email, class: "form-label fw-medium" %>
+    <%= form.email_field :email, class: "form-control", placeholder: "Enter email" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password, "Password", class: "form-label fw-medium" %>
     <%= form.password_field :password, class: "form-control", placeholder: "Enter password" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password_confirmation, "Confirm Password", class: "form-label fw-medium" %>
+    <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Confirm password" %>
   </div>
 
   <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">

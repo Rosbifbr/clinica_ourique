@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Client One
+  cpf: "11111111111"
+  phone: "123456789"
+  birthdate: <%= Date.today - 30.years %>
+  address: "123 Main St"
+  postal_code: "12345-678"
+  neighborhood: "Downtown"
+  dental_map_image_base64: ""
+
+two:
+  name: Client Two
+  cpf: "22222222222"
+  phone: "987654321"
+  birthdate: <%= Date.today - 40.years %>
+  address: "456 Oak Ave"
+  postal_code: "54321-876"
+  neighborhood: "Uptown"
+  dental_map_image_base64: ""
