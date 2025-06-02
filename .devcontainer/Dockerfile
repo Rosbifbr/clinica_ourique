@@ -18,6 +18,7 @@ RUN apt-get update -qq && \
   pkg-config \
   nodejs \
   yarn \
+  ruby-dev \
   && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set development environment

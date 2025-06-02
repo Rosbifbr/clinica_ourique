@@ -3,7 +3,7 @@
 {
   "name": "clinica_ourique",
   "dockerComposeFile": "compose.yaml",
-  "service": "rails-app",
+  "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
