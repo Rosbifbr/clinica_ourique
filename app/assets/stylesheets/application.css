@@ -154,6 +154,14 @@ table.table tr:last-child td:last-child {
     border-color: #86b7fe;
 }
 
+.form-label {
+    margin-bottom: 0.5rem; /* Adjust as needed */
+}
+
+.input-group {
+    margin-bottom: 1rem; /* Adjust as needed */
+}
+
 .btn-primary {
     background-color: var(--clinic-primary);
     border-color: var(--clinic-primary);

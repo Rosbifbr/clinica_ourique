@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8">
-        <%= form_with(model: [@client, procedure], url: procedure.new_record? ? client_procedures_path(@client) : client_procedure_path(@client, procedure), class: "card shadow-lg") do |form| %>
+      <%= form_with(model: [@client, procedure], url: procedure.new_record? ? client_procedures_path(@client) : client_procedure_path(@client, procedure), class: "card shadow-lg") do |form| %>
         <div class="card-header bg-primary bg-gradient text-white py-3">
           <h4 class="card-title mb-0">
             <i class="bi bi-clipboard2-pulse-fill me-2"></i>
@@ -25,7 +25,7 @@
             </div>
           <% end %>
 
-          <div class="col-12">
+          <div class="mb-3">
             <%= form.label :procedure_type_id, "Procedure Type", class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-activity"></i></span>
@@ -39,15 +39,15 @@
             </div>
           </div>
 
-          <div class="col-12">
-            <%= form.label :observation, class: "form-label fw-medium" %>
+          <div class="mb-3">
+            <%= form.label :observation, "Observation", class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
               <%= form.text_area :observation, class: "form-control", rows: 3, placeholder: "Enter observations" %>
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="mb-3">
             <%= form.label :date, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-calendar"></i></span>
@@ -55,7 +55,7 @@
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="mb-3">
             <%= form.label :teeth, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-diagram-2"></i></span>

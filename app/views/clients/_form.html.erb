@@ -38,7 +38,7 @@
               <%= form.label :cpf, class: "form-label fw-medium" %>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                <%= form.text_field :cpf, class: "form-control", placeholder: "Enter CPF" %>
+                <%= form.text_field :cpf, class: "form-control", placeholder: "Enter CPF", oninput: "formatCPF(this)" %>
               </div>
             </div>
 
@@ -46,7 +46,7 @@
               <%= form.label :phone, class: "form-label fw-medium" %>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                <%= form.text_field :phone, class: "form-control", placeholder: "Enter phone number" %>
+                <%= form.text_field :phone, class: "form-control", placeholder: "Enter phone number", oninput: "formatPhone(this)" %>
               </div>
             </div>
 
@@ -62,7 +62,7 @@
               <%= form.label :postal_code, class: "form-label fw-medium" %>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                <%= form.text_field :postal_code, class: "form-control", placeholder: "Enter postal code" %>
+                <%= form.text_field :postal_code, class: "form-control", placeholder: "Enter postal code", oninput: "formatPostalCode(this)" %>
               </div>
             </div>
 
@@ -157,3 +157,23 @@
     </div>
   </div>
 </div>
+
+<script>
+  function formatCPF(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  }
+
+  function formatPhone(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    input.value = value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+  }
+
+  function formatPostalCode(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 8) value = value.slice(0, 8);
+    input.value = value.replace(/(\d{5})(\d{3})/, "$1-$2");
+  }
+</script>
