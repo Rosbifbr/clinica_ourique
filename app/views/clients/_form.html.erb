@@ -104,41 +104,28 @@
               </div>
             </div>
 
-            <!-- Odontogram Section -->
+            <!-- Dental Map Section (ActiveStorage) -->
             <div class="mt-4">
               <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                <h4 class="mb-0">
-                  <i class="bi bi-grid-3x3-gap me-2"></i>Odontogram
-                </h4>
+                <h4 class="mb-0"><i class="bi bi-grid-3x3-gap me-2"></i>Dental Map</h4>
               </div>
               <div class="mb-3">
-                  <% if @client.has_custom_odontogram? %>
-                      <div class="alert alert-info">
-                          <i class="bi bi-info-circle me-2"></i>
-                          This client has a customized odontogram.
-                          <button type="button" class="btn btn-warning"
-                            data-bs-toggle="modal"
-                            data-bs-target="#resetModal"
-                            data-item-name="User Settings"
-                            data-item-type="configuration"
-                            data-item-url="/settings/reset">
-                            <i class="bi bi-arrow-counterclockwise"></i> Reset Settings
-                          </button>
-                        </div>
-                  <% end %>
+                <%= form.label :dental_map, class: "form-label fw-medium" %>
+                <%= form.file_field :dental_map, class: "form-control" %>
               </div>
-            </div>
-
-            <div class="mb-3">
-              <%= image_tag @client.odontogram_url, class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" %>
-            </div>
-
-            <% unless @client.has_custom_odontogram? %>
+              <% if @client.dental_map.attached? %>
+                <div class="mb-3">
+                  <%= image_tag @client.dental_map.representation(resize_to_limit: [300, 300]), class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" %>
+                  <%# Add a way to remove the dental map if needed. Requires a custom route or direct ActiveStorage blob deletion. %>
+                  <%# Example: link_to "Remove Dental Map", delete_dental_map_client_path(@client), method: :delete, data: { confirm: \"Are you sure?\" } %>
+                </div>
+              <% else %>
                 <div class="alert alert-info d-flex align-items-center">
                     <i class="bi bi-info-circle me-2 fs-5"></i>
-                    <div>This client is using the default odontogram.</div>
+                    <div>No dental map uploaded.</div>
                 </div>
-            <% end %>
+              <% end %>
+            </div>
         </div>
 
         <div class="card-footer bg-light p-3">

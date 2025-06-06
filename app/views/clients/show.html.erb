@@ -87,30 +87,27 @@
               <% end %>
             </div>
 
-            <!-- Odontogram Section -->
+            <!-- Dental Map Section -->
             <div class="mt-4">
               <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
                 <h4 class="mb-0">
-                  <i class="bi bi-grid-3x3-gap me-2"></i>Odontogram
+                  <i class="bi bi-grid-3x3-gap me-2"></i>Dental Map
                 </h4>
                 <div>
-                  <%= link_to edit_client_path(@client, anchor: "odontogram"), class: "btn btn-secondary" do %>
-                    <i class="bi bi-pencil me-1"></i>Edit Odontogram
+                  <%= link_to edit_client_path(@client), class: "btn btn-secondary" do %>
+                    <i class="bi bi-pencil me-1"></i>Edit Client / Dental Map
                   <% end %>
                 </div>
               </div>
 
               <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body">
-                  <%= image_tag @client.odontogram_url, class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px" %>
-
-                  <% if @client.has_custom_odontogram? %>
-                    <div class="text-center mt-2">
-                      <span class="badge bg-info">Custom odontogram</span>
-                    </div>
+                <div class="card-body text-center"> <%# Added text-center for placeholder %>
+                  <% if @client.dental_map.attached? %>
+                    <%= image_tag @client.dental_map.representation(resize_to_limit: [600, 600]), class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px" %>
                   <% else %>
-                    <div class="text-center mt-2">
-                      <span class="badge bg-secondary">Default odontogram</span>
+                    <div class="alert alert-info d-flex align-items-center justify-content-center">
+                      <i class="bi bi-info-circle me-2 fs-5"></i>
+                      <div>No dental map uploaded.</div>
                     </div>
                   <% end %>
                 </div>

@@ -1,13 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  procedure_type: MyString
+  # procedure_type: MyString # Old incorrect value
+  procedure_type: one      # Corrected: references 'one' from procedure_types.yml
   observation: MyText
   date: 2025-03-21
   teeth: MyString
+  client: client_one
 
 two:
-  procedure_type: MyString
+  # procedure_type: MyString # Old incorrect value
+  procedure_type: two      # Corrected: references 'two' from procedure_types.yml
   observation: MyText
   date: 2025-03-21
   teeth: MyString
+  client: client_two

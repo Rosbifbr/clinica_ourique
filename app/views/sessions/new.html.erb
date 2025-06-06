@@ -6,10 +6,10 @@
 
                 <%= form_with url: sign_in_path, method: :post, class: "mt-3" do %>
                     <div class="mb-4">
-                        <%= label_tag :name, "Name", class: "form-label fw-medium" %>
-                        <%= text_field_tag :name, nil,
+                        <%= label_tag :email, "Email", class: "form-label fw-medium" %>
+                        <%= email_field_tag :email, nil,
                             class: "form-control form-control-lg",
-                            placeholder: "Enter your username" %>
+                            placeholder: "Enter your email" %>
                     </div>
 
                     <div class="mb-4">

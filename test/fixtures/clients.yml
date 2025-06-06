@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+client_one:
+  name: Test Client One
+  phone: "123-456-7890"
+  address: "123 Main St"
+
+client_two:
+  name: Test Client Two
+  phone: "098-765-4321"
+  address: "456 Oak Ave"
+
+one:
+  name: Fixture Client One
+  cpf: "000.000.000-00"
+  # Add other required fields if any, based on Client model validations.
+  # Current model has no validations.

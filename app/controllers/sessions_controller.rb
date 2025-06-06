@@ -5,12 +5,12 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(name: params[:name])
-    if user && user.password.to_s == params[:password].to_s  # Simplified password check
+    user = User.find_by(email: params[:email].downcase)
+    if user && user.authenticate(params[:password])
       session[:user_id] = user.id
       redirect_to root_path, notice: "Signed in successfully!"
     else
-      flash.now[:alert] = "Invalid name or password"
+      flash.now[:alert] = "Invalid email or password"
       render :new, status: :unprocessable_entity
     end
   end

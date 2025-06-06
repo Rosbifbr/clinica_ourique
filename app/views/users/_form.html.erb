@@ -25,7 +25,7 @@
             </div>
           <% end %>
 
-          <div class="mb-4">
+          <div class="mb-3"> <!-- Changed mb-4 to mb-3 for consistency -->
             <%= form.label :name, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text">
@@ -38,7 +38,20 @@
             </div>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-3"> <!-- Added Email field -->
+            <%= form.label :email, class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <%= form.email_field :email,
+                  class: "form-control",
+                  placeholder: "Enter your email",
+                  autocomplete: "email" %>
+            </div>
+          </div>
+
+          <div class="mb-3"> <!-- Changed mb-4 to mb-3 -->
             <%= form.label :password, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text">
@@ -49,23 +62,43 @@
                   placeholder: "Enter your password",
                   autocomplete: "new-password" %>
             </div>
-            <div class="form-text text-muted">
-              <i class="bi bi-info-circle me-1"></i>
-              Password should be at least 6 characters long
+            <% unless user.persisted? %> <!-- Show length hint only for new users or if password is being set -->
+              <div class="form-text text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Password should be at least 6 characters long.
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mb-4"> <!-- Added Password Confirmation field -->
+            <%= form.label :password_confirmation, class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-key-fill"></i>
+              </span>
+              <%= form.password_field :password_confirmation,
+                  class: "form-control",
+                  placeholder: "Confirm your password",
+                  autocomplete: "new-password" %>
             </div>
           </div>
         </div>
 
         <div class="card-footer bg-light p-3">
           <div class="d-flex justify-content-center gap-3">
-            <% if defined?(users_path) %>
+            <% if defined?(users_path) && user.persisted? %> <!-- Show cancel only if user persisted, or adjust as needed -->
               <%= link_to users_path, class: "btn btn-outline-secondary" do %>
                 <i class="bi bi-x-circle me-1"></i>Cancel
               <% end %>
+            <% elsif !user.persisted? && defined?(root_path) %> <!-- Link to root or sign in for new user cancel -->
+               <%= link_to "Cancel", root_path, class: "btn btn-outline-secondary" %>
             <% end %>
-            <%= form.submit class: "btn btn-primary", value: user.new_record? ? "Create User" : "Update Account" do %>
-              <i class="bi bi-check-circle me-1"></i>
-            <% end %>
+            <%= form.submit class: "btn btn-primary", value: user.new_record? ? "Create User" : "Update Account" %>
+            <%# Original submit had an icon, which is fine. Re-adding for completeness if form.submit doesn't take a block well here. %>
+            <%# If form.submit needs a block for icon: %>
+            <%#= form.button type: :submit, class: "btn btn-primary" do %>
+              <%# <i class="bi bi-check-circle me-1"></i> <%= user.new_record? ? "Create User" : "Update Account" %>
+            <%# <% end %>
           </div>
         </div>
       <% end %>

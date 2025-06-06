@@ -41,32 +41,10 @@ class ClientsController < ApplicationController
 
   # PATCH/PUT /clients/1 or /clients/1.json
   def update
-    if params[:client]&.dig(:odontogram_action) == "reset_to_default"
-      # Reset to default by clearing the path
-      @client.odontogram_path = nil
-      @client.save
+    # Old odontogram_action and odontogram_image logic removed.
+    # ActiveStorage handles dental_map attachment directly via client_params.
 
-      # Remove the temporary parameters
-      params[:client].delete(:odontogram_action)
-      params[:client].delete(:odontogram_image)
-
-      redirect_to client_url(@client), notice: "Odontogram reset to default."
-      return
-    elsif params[:client][:odontogram_image].present?
-      # Handle custom image upload as before
-      uploaded_io = params[:client][:odontogram_image]
-      filename = "odontogram_#{@client.id}_#{Time.now.to_i}#{File.extname(uploaded_io.original_filename).downcase}"
-
-      File.open(Rails.root.join('public', 'uploads', 'odontograms', filename), 'wb') do |file|
-        file.write(uploaded_io.read)
-      end
-
-      params[:client][:odontogram_path] = filename
-    end
-
-    params[:client].delete(:odontogram_action)
-    params[:client].delete(:odontogram_image)
-
+    # Keep existing logic for attaching multiple images if present
     if params[:client][:images]
       params[:client][:images].each do |image|
         @client.images.attach(image)
@@ -75,6 +53,20 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       if @client.update(client_params)
+        # If dental_map is being cleared, purge it.
+        # This assumes a checkbox or similar `params[:client][:remove_dental_map] == '1'` could be used in the form.
+        # Or, if dental_map is simply not provided in client_params for an update, it remains unchanged.
+        # If params[:client][:dental_map] is nil and there was an existing map, it will NOT be detached by default.
+        # Explicit purge is needed if a "remove" checkbox is implemented.
+        # For now, let's assume client_params handles setting/replacing dental_map.
+        # If `dental_map` is passed as `nil` explicitly in params and the model is updated,
+        # `has_one_attached` might detach it, but this behavior can be subtle.
+        # A common pattern is a separate "remove_dental_map" checkbox.
+        # params[:client][:dental_map].nil? might not be enough if the field wasn't in the form.
+        # If :dental_map is not in client_params at all, it won't be touched.
+        # If :dental_map is in client_params and is nil (e.g. from an empty file field), it will try to attach nil,
+        # which effectively can detach an existing one for `has_one_attached`.
+
         format.html { redirect_to client_url(@client), notice: "Client was successfully updated." }
         format.json { render :show, status: :ok, location: @client }
       else
@@ -85,22 +77,17 @@ class ClientsController < ApplicationController
     end
   end
 
-  def reset_odontogram
-    @client.odontogram_path = nil
-
-    if @client.save
-      redirect_to client_path(@client), notice: "Odontogram has been reset to default."
-    else
-      redirect_to client_path(@client), alert: "Failed to reset odontogram."
-    end
-  end
+  # reset_odontogram action removed
 
   # DELETE /clients/1 or /clients/1.json
   def destroy
-    if @client.odontogram_path.present?
-      odontogram_file_path = Rails.root.join('public', 'uploads', 'odontograms', @client.odontogram_path)
-      File.delete(odontogram_file_path) if File.exist?(odontogram_file_path)
-    end
+    # Old manual deletion of odontogram_path removed.
+    # ActiveStorage attachments (like dental_map and images) should have dependent: :purge or be manually purged if needed.
+    # has_one_attached :dental_map (by default, no dependent purge)
+    # has_many_attached :images, dependent: :destroy (will purge)
+    # So, dental_map needs explicit purge if we want it gone when client is destroyed.
+    @client.dental_map.purge if @client.dental_map.attached?
+    # images will be purged due to dependent: :destroy in the model.
 
     if @client.destroy
       redirect_to clients_path, notice: "Client was successfully deleted."
@@ -129,6 +116,6 @@ class ClientsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood, :observation, :odontogram_path, images: [])
+    params.require(:client).permit(:name, :cpf, :phone, :birthdate, :address, :postal_code, :neighborhood, :observation, :dental_map, images: [])
   end
 end
