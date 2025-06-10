@@ -1,0 +1,65 @@
+<div class="container mt-4">
+  <h2 class="mb-4"><i class="bi bi-cake2 me-2"></i>Birthdays Report</h2>
+
+  <%= form_with(url: "/reports/birthdays", method: :get, class: "mb-4 p-3 border rounded bg-light") do |form| %>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <%= form.label :month, "Month (1-12)", class: "form-label" %>
+        <%= form.number_field :month, value: params[:month], class: "form-control form-control-sm", min: 1, max: 12, placeholder: "All (or enter 1-12)" %>
+      </div>
+      <p class="col-12 small text-muted mt-1 mb-0">OR select a date range (day and month will be used):</p>
+      <div class="col-md-4">
+        <%= form.label :start_date, "Start Date (for range)", class: "form-label" %>
+        <%= form.date_field :start_date, value: params[:start_date], class: "form-control form-control-sm" %>
+      </div>
+      <div class="col-md-4">
+        <%= form.label :end_date, "End Date (for range)", class: "form-label" %>
+        <%= form.date_field :end_date, value: params[:end_date], class: "form-control form-control-sm" %>
+      </div>
+      <div class="col-md-2">
+        <%= form.submit "Filter", class: "btn btn-primary btn-sm w-100" %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @clients.any? %>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Client Name</th>
+            <th>Birthdate</th>
+            <th>Phone</th>
+            <th>Age (Upcoming/Past)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @clients.each do |client| %>
+            <tr>
+              <td><%= link_to client.name, client_path(client) %></td>
+              <td><%= client.birthdate&.strftime("%B %d, %Y") %></td>
+              <td><%= client.phone %></td>
+              <td>
+                <% if client.birthdate %>
+                  <%
+                    today = Date.today
+                    # Calculate age at next birthday or age at last birthday this year
+                    # This is a simplified age calculation for display
+                    age_this_year = today.year - client.birthdate.year
+                    birthday_this_year = client.birthdate.change(year: today.year)
+                    age_this_year -= 1 if birthday_this_year > today # Adjust if birthday hasn't occurred yet this year
+                  %>
+                  <%= age_this_year + 1 %> (on <%= client.birthdate.strftime("%B %d") %>)
+                <% else %>
+                  N/A
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">No birthdays found for the selected filters.</div>
+  <% end %>
+</div>

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "searches/show"
+  get "reports/financial"
+  get "reports/birthdays"
+  get "reports/procedures"
   root "clients#index"  # Sign-in page as the root
     get "sign_in", to: "sessions#new"
     post "sign_in", to: "sessions#create"

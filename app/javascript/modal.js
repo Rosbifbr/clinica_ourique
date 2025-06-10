@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", function () {
   // Delete Modal Handler
   const deleteModal = document.getElementById("deleteModal");
   if (deleteModal) {

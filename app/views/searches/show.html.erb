@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <h2 class="mb-4"><i class="bi bi-search me-2"></i>General Search</h2>
+
+  <%= form_with(url: "/searches/show", method: :get, class: "mb-4 p-3 border rounded bg-light") do |form| %>
+    <div class="input-group mb-3">
+      <%= form.search_field :q, value: @search_term, class: "form-control form-control-lg", placeholder: "Search clients and procedures..." %>
+      <%= form.submit "Search", class: "btn btn-primary btn-lg" %>
+    </div>
+    <%# Advanced filters placeholder can be added later %>
+  <% end %>
+
+  <% if @search_term.present? %>
+    <h3 class="h5 mt-4">Search Results for "<%= @search_term %>"</h3>
+
+    <% if @client_results.blank? && @procedure_results.blank? %>
+      <div class="alert alert-info mt-3">No results found for "<%= @search_term %>".</div>
+    <% else %>
+      <% if @client_results.any? %>
+        <h4 class="h6 mt-3 text-muted">Matching Clients (<%= @client_results.count %>)</h4>
+        <div class="list-group list-group-flush mb-3">
+          <% @client_results.each do |client| %>
+            <%= link_to client_path(client), class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1"><%= client.name %></h6>
+                <small class="text-muted"><i class="bi bi-person"></i> Client</small>
+              </div>
+              <p class="mb-1 small">
+                CPF: <%= client.cpf %>, Phone: <%= client.phone %>
+                <% if client.observation.present? %>
+                  <br>Observation: <%= truncate(client.observation, length: 80) %>
+                <% end %>
+              </p>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @procedure_results.any? %>
+        <h4 class="h6 mt-4 text-muted">Matching Procedures (<%= @procedure_results.count %>)</h4>
+        <div class="list-group list-group-flush">
+          <% @procedure_results.each do |procedure| %>
+            <%# Procedures don't have their own show page, typically viewed via client %>
+            <%= link_to client_path(procedure.client, anchor: "procedure-\#{procedure.id}"), class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">Procedure for: <%= procedure.client.name %></h6>
+                <small class="text-muted"><i class="bi bi-clipboard-pulse"></i> Procedure</small>
+              </div>
+              <p class="mb-1 small">
+                Type: <%= procedure.procedure_type.name %>, Date: <%= procedure.date&.strftime("%d/%m/%Y") %>, Dentist: <%= procedure.dentist %><br>
+                Teeth: <%= procedure.teeth %>, Observation: <%= truncate(procedure.observation, length: 80) %>
+              </p>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="alert alert-secondary">Enter a search term to begin. (Searches Client: Name, CPF, Phones, Address, Neighborhood, Observation; Procedure: Observation, Teeth, Dentist, Client Name, Type Name)</div>
+  <% end %>
+</div>

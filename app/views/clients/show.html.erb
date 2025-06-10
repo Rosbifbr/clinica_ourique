@@ -3,7 +3,7 @@
     <div class="col-12 col-xl-12"> <!-- Main Card Size -->
       <div class="card shadow-lg mb-4">
         <!-- Title -->
-        <div class="card-header bg-primary bg-gradient text-white py-3 d-flex justify-content-between align-items-center">
+        <div class="card-header bg-primary bg-gradient text-white py-2 d-flex justify-content-between align-items-center">
           <h4 class="mb-0">
             <i class="bi bi-person-circle me-2"></i>
             Client Details
@@ -24,45 +24,63 @@
         </div>
 
         <!-- Client info -->
-        <div class="card-body p-4">
+        <div class="card-body p-3">
           <div class="row g-4">
             <div class="col-12">
               <h1 class="border-bottom pb-2 mb-3"><%= @client.name %></h1>
             </div>
 
+          <!-- Client Info - Optimized Layout -->
+          <div class="row g-3 mb-3"> <!-- Reduced gutter g-3, added bottom margin -->
+            <!-- Top Priority Fields -->
             <div class="col-md-6">
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-card-text me-2"></i>CPF</label>
-                <p class="fs-5 mb-3"><%= @client.cpf %></p>
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-card-text me-1"></i>CPF</label>
+                <p class="fs-6 mb-1"><%= @client.cpf %></p>
               </div>
-
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-telephone me-2"></i>Phone</label>
-                <p class="fs-5 mb-3"><%= @client.phone %></p>
+            </div>
+            <div class="col-md-6">
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-calendar-event me-1"></i>Birthdate</label>
+                <p class="fs-6 mb-1"><%= @client.birthdate&.strftime("%d/%m/%Y") %></p>
               </div>
-
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-calendar me-2"></i>Birthdate</label>
-                <p class="fs-5 mb-3"><%= @client.birthdate&.strftime("%B %d, %Y") %></p>
+            </div>
+            <div class="col-md-6">
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-telephone me-1"></i>Phone 1</label>
+                <p class="fs-6 mb-1"><%= @client.phone %></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-telephone-plus me-1"></i>Phone 2</label>
+                <p class="fs-6 mb-1"><%= @client.phone2.blank? ? "N/A" : @client.phone2 %></p>
               </div>
             </div>
 
+            <!-- Other Fields - Condensed -->
+            <div class="col-12 mt-2"><hr class="my-2"></div> <!-- Separator -->
+
             <div class="col-md-6">
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-house me-2"></i>Address</label>
-                <p class="fs-5 mb-3"><%= @client.address %></p>
-              </div>
-
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-geo-alt me-2"></i>Postal Code</label>
-                <p class="fs-5 mb-3"><%= @client.postal_code %></p>
-              </div>
-
-              <div class="info-group">
-                <label class="text-muted mb-1"><i class="bi bi-building me-2"></i>Neighborhood</label>
-                <p class="fs-5 mb-3"><%= @client.neighborhood %></p>
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-house me-1"></i>Address</label>
+                <p class="fs-6 mb-1"><%= @client.address.blank? ? "N/A" : @client.address %></p>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-geo-alt me-1"></i>Postal Code</label>
+                <p class="fs-6 mb-1"><%= @client.postal_code.blank? ? "N/A" : @client.postal_code %></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-group mb-2">
+                <label class="text-muted small fw-bold mb-0"><i class="bi bi-building me-1"></i>Neighborhood</label>
+                <p class="fs-6 mb-1"><%= @client.neighborhood.blank? ? "N/A" : @client.neighborhood %></p>
+              </div>
+            </div>
+          </div>
+          <!-- End Client Info - Optimized Layout -->
 
             <!-- Client Observation -->
             <div class="mt-4">
@@ -100,18 +118,13 @@
                 </div>
               </div>
 
-              <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body text-center"> <%# Added text-center for placeholder %>
-                  <% if @client.dental_map.attached? %>
-                    <%= image_tag @client.dental_map.representation(resize_to_limit: [600, 600]), class: "img-fluid rounded mx-auto d-block", style: "max-height: 300px" %>
-                  <% else %>
-                    <div class="alert alert-info d-flex align-items-center justify-content-center">
-                      <i class="bi bi-info-circle me-2 fs-5"></i>
-                      <div>No dental map uploaded.</div>
-                    </div>
-                  <% end %>
+                <div class="card border-0 shadow-sm mb-4"
+                     data-controller="odontogram-editor"
+                     data-odontogram-editor-initial-canvas-json-value="<%= @client.dental_map.attached? ? @client.dental_map.blob.download.then { |data| ERB::Util.html_escape(data) }.html_safe : 'null' %>">
+                  <div class="card-body text-center p-2" style="background-color: #f8f9fa;"> <%# Reduced padding %>
+                    <canvas data-odontogram-editor-target="canvas" style="display: block; margin: auto; max-width: 100%; height: auto; min-height: 350px;"></canvas> <%# Adjusted min-height for larger preview %>
+                  </div>
                 </div>
-              </div>
             </div>
 
             <!-- Procedures -->
@@ -133,34 +146,43 @@
                     <div class="col-lg-6">
                       <div class="card h-100 border-0 shadow-sm">
                         <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
-                          <span class="badge bg-primary px-3 py-2 rounded-pill fw-medium">
-                            <%= procedure.procedure_type.name rescue "Unknown Type" %>
+                          <small class="text-muted fw-medium"><strong>Date:</strong> <%= procedure.date&.strftime('%d/%m/%Y') || 'No date' %></small>
+                          <span class="badge bg-info px-3 py-2 rounded-pill fw-medium">
+                            <strong>Teeth:</strong> <%= procedure.teeth.blank? ? "N/A" : procedure.teeth %>
                           </span>
-                          <small class="text-muted fw-medium"><%= procedure.date&.strftime('%d/%m/%Y') || 'No date' %></small>
                         </div>
                         <div class="card-body p-3">
                           <div class="procedure-details">
-                            <% if procedure.teeth.present? %>
-                              <div class="mb-3">
-                                <h6 class="text-muted mb-2 fw-bold small text-uppercase">
-                                  <i class="bi bi-diagram-3 me-1"></i>Teeth
-                                </h6>
-                                <p class="mb-0 badge bg-light text-dark border px-2 py-1 fs-6"><%= procedure.teeth %></p>
+                            <div class="mb-2">
+                              <h6 class="text-muted mb-1 fw-bold small text-uppercase">Procedure Type</h6>
+                              <p class="mb-1"><%= procedure.procedure_type.name rescue "Unknown Type" %></p>
+                            </div>
+                            <% if procedure.dentist.present? %>
+                              <div class="mb-2">
+                                <h6 class="text-muted mb-1 fw-bold small text-uppercase">Dentist</h6>
+                                <p class="mb-1"><%= procedure.dentist %></p>
                               </div>
                             <% end %>
-
                             <% if procedure.observation.present? %>
                               <div class="mb-2">
-                                <h6 class="text-muted mb-2 fw-bold small text-uppercase">
-                                  <i class="bi bi-journal-text me-1"></i>Observation
-                                </h6>
-                                <div class="bg-light p-2 rounded border-start border-success border-3">
-                                  <p class="mb-0 text-dark" style="max-height: 80px; overflow-y: auto;">
+                                <h6 class="text-muted mb-1 fw-bold small text-uppercase">Observation</h6>
+                                <div class="bg-light p-2 rounded border-start border-secondary border-3">
+                                  <p class="mb-0 text-dark small" style="max-height: 60px; overflow-y: auto;">
                                     <%= procedure.observation %>
                                   </p>
                                 </div>
                               </div>
                             <% end %>
+                            <div class="row mt-2 pt-2 border-top">
+                              <div class="col-6">
+                                <h6 class="text-muted mb-1 fw-bold small text-uppercase">Debit</h6>
+                                <p class="mb-1 text-danger fw-bold"><%= number_to_currency(procedure.debit, unit: "R$") %></p>
+                              </div>
+                              <div class="col-6">
+                                <h6 class="text-muted mb-1 fw-bold small text-uppercase">Credit</h6>
+                                <p class="mb-1 text-success fw-bold"><%= number_to_currency(procedure.credit, unit: "R$") %></p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="card-footer bg-white border-top pt-2 pb-2">
@@ -232,7 +254,7 @@
             </div>
         </div>
 
-        <div class="card-footer bg-light p-3">
+        <div class="card-footer bg-light p-2">
           <div class="d-flex justify-content-end gap-2">
               <%= link_to clients_path, class: "btn btn-outline-secondary" do %>
                 <i class="bi bi-arrow-left me-1"></i>Back to Clients

@@ -12,7 +12,8 @@ class ClientTest < ActiveSupport::TestCase
       address: "123 Main St",
       postal_code: "12345-678",
       neighborhood: "Downtown",
-      observation: "Some observations"
+      observation: "Some observations",
+      phone2: nil
     }
   end
 
@@ -69,4 +70,37 @@ class ClientTest < ActiveSupport::TestCase
     # If you add validation, change this test.
   end
 
+  test "should be valid with phone2 present" do
+    client = Client.new(@client_params.merge(phone2: "(22) 55555-4444"))
+    assert client.valid?, "Client should be valid with phone2: #{client.errors.full_messages.join(", ")}"
+  end
+
+  test "should be valid with phone2 blank" do
+    client = Client.new(@client_params.merge(phone2: ""))
+    assert client.valid?, "Client should be valid with blank phone2: #{client.errors.full_messages.join(", ")}"
+  end
+
+  test "address and postal_code should be optional" do
+    # Test creation without address and postal_code
+    client_minimal = Client.new(name: "Minimal Client", cpf: "12312312300", phone: "1234567890")
+    assert client_minimal.valid?, "Client should be valid without address and postal_code: #{client_minimal.errors.full_messages.join(", ")}"
+
+    # Test with them blank
+    client_blank_address = Client.new(@client_params.merge(address: "", postal_code: ""))
+    assert client_blank_address.valid?, "Client should be valid with blank address and postal_code: #{client_blank_address.errors.full_messages.join(", ")}"
+  end
+
+  test "can attach a dental_map with JSON content" do
+    client = Client.create!(@client_params.except(:phone2)) # Use params without phone2 to match original @client_params structure for this test file
+    sample_json_content = '{ "fabric": "data" }'
+
+    client.dental_map.attach(
+      io: StringIO.new(sample_json_content),
+      filename: "dental_data.json",
+      content_type: "application/json"
+    )
+    assert client.dental_map.attached?, "Dental map (JSON) should be attached"
+    assert_equal "application/json", client.dental_map.blob.content_type
+    assert_equal sample_json_content, client.dental_map.blob.download
+  end
 end

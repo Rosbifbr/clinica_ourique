@@ -1,17 +1,29 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  # procedure_type: MyString # Old incorrect value
-  procedure_type: one      # Corrected: references 'one' from procedure_types.yml
-  observation: MyText
-  date: 2025-03-21
-  teeth: MyString
-  client: client_one
+  client: one # Assumes clients.yml has :one
+  procedure_type: one # Assumes procedure_types.yml has :one
+  date: <%= Date.today - 1.day %>
+  teeth: "11, 12"
+  observation: "Fixture procedure one"
+  dentist: "Dr. Fixture"
+  debit: 50.00
+  credit: 0.00
 
 two:
-  # procedure_type: MyString # Old incorrect value
-  procedure_type: two      # Corrected: references 'two' from procedure_types.yml
-  observation: MyText
-  date: 2025-03-21
-  teeth: MyString
-  client: client_two
+  client: one # Assumes clients.yml has :one
+  procedure_type: two # Assumes procedure_types.yml has :two
+  date: <%= Date.today - 2.days %>
+  teeth: "24"
+  observation: "Fixture procedure two"
+  dentist: "Dr. Test"
+  debit: 120.00
+  credit: 10.00
+
+three:
+  client: two # Linked to clients(:two)
+  procedure_type: one # Linked to procedure_types(:one)
+  date: <%= Date.today.last_month %>
+  teeth: "31"
+  observation: "Fixture procedure three for client two"
+  dentist: "Dr.Fixture"
+  debit: 75.00
+  credit: 5.00

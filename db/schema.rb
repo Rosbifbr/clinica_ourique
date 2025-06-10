@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_235804) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_09_191721) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_235804) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "observation"
+    t.string "phone2"
   end
 
   create_table "procedure_types", force: :cascade do |t|
@@ -66,6 +67,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_235804) do
     t.datetime "updated_at", null: false
     t.string "teeth"
     t.integer "procedure_type_id"
+    t.string "dentist"
+    t.decimal "debit", precision: 8, scale: 2
+    t.decimal "credit", precision: 8, scale: 2
     t.index ["client_id"], name: "index_procedures_on_client_id"
     t.index ["procedure_type_id"], name: "index_procedures_on_procedure_type_id"
   end

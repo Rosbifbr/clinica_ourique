@@ -8,7 +8,7 @@ class ProceduresController < ApplicationController
 
   # GET /procedures/new
   def new
-    @procedure = @client.procedures.build
+    @procedure = @client.procedures.build(date: Date.today)
   end
 
   # GET /procedures/1/edit
@@ -73,6 +73,6 @@ class ProceduresController < ApplicationController
   end
 
   def procedure_params
-    params.require(:procedure).permit(:procedure_type_id, :observation, :date, :teeth, :client_id)
+    params.require(:procedure).permit(:procedure_type_id, :observation, :date, :teeth, :dentist, :debit, :credit, :client_id)
   end
 end

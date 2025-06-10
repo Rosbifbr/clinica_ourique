@@ -1,0 +1,83 @@
+<div class="container mt-4">
+  <h2 class="mb-4"><i class="bi bi-card-list me-2"></i>Procedures Report</h2>
+
+  <%= form_with(url: "/reports/procedures", method: :get, class: "mb-4 p-3 border rounded bg-light") do |form| %>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <%= form.label :procedure_type_id, "Procedure Type", class: "form-label" %>
+        <%= form.collection_select :procedure_type_id, @procedure_types, :id, :name, { include_blank: "All Types", selected: params[:procedure_type_id] }, class: "form-select form-select-sm" %>
+      </div>
+      <div class="col-md-3">
+        <%= form.label :start_date, "Start Date", class: "form-label" %>
+        <%= form.date_field :start_date, value: params[:start_date], class: "form-control form-control-sm" %>
+      </div>
+      <div class="col-md-3">
+        <%= form.label :end_date, "End Date", class: "form-label" %>
+        <%= form.date_field :end_date, value: params[:end_date], class: "form-control form-control-sm" %>
+      </div>
+      <div class="col-md-2">
+        <%= form.submit "Filter", class: "btn btn-primary btn-sm w-100" %>
+      </div>
+    </div>
+  <% end %>
+
+  <h3 class="mb-3 h5">Summary: Count by Procedure Type</h3>
+  <% if @procedures_summary.any? %>
+    <div class="table-responsive mb-4">
+      <table class="table table-sm table-striped table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Procedure Type</th>
+            <th class="text-center">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @procedures_summary.each do |procedure_name, count| %>
+            <tr>
+              <td><%= procedure_name %></td>
+              <td class="text-center"><%= count %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">No procedures found for the selected filters.</div>
+  <% end %>
+
+  <h3 class="mb-3 h5">Filtered Procedures List</h3>
+    <% if @filtered_procedures.any? %>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Procedure Type</th>
+            <th>Teeth</th>
+            <th>Dentist</th>
+            <th>Observation</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @filtered_procedures.each do |procedure| %>
+            <tr>
+              <td><%= procedure.date&.strftime("%d/%m/%Y") %></td>
+              <td><%= link_to procedure.client.name, client_path(procedure.client) %></td>
+              <td><%= procedure.procedure_type.name %></td>
+              <td><%= procedure.teeth %></td>
+              <td><%= procedure.dentist %></td>
+              <td><%= truncate(procedure.observation, length: 50) %></td>
+              <td class="text-end text-danger"><%= number_to_currency(procedure.debit, unit: "R$") %></td>
+              <td class="text-end text-success"><%= number_to_currency(procedure.credit, unit: "R$") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">No procedures match the current filters.</div>
+  <% end %>
+</div>

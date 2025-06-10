@@ -40,14 +40,6 @@
           </div>
 
           <div class="mb-3">
-            <%= form.label :observation, "Observation", class: "form-label fw-medium" %>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
-              <%= form.text_area :observation, class: "form-control", rows: 3, placeholder: "Enter observations" %>
-            </div>
-          </div>
-
-          <div class="mb-3">
             <%= form.label :date, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-calendar"></i></span>
@@ -59,7 +51,40 @@
             <%= form.label :teeth, class: "form-label fw-medium" %>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-diagram-2"></i></span>
-              <%= form.text_field :teeth, class: "form-control", placeholder: "Enter teeth number" %>
+              <%= form.text_field :teeth, class: "form-control", placeholder: "Enter teeth numbers (e.g., 11, 21-23)" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :dentist, class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+              <%= form.text_field :dentist, class: "form-control", placeholder: "Enter dentist name" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :observation, "Observation", class: "form-label fw-medium" %>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
+              <%= form.text_area :observation, class: "form-control", rows: 3, placeholder: "Enter observations" %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= form.label :debit, "Debit Amount", class: "form-label fw-medium" %>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-cash-coin"></i></span>
+                <%= form.number_field :debit, class: "form-control", step: "0.01", placeholder: "e.g., 150.00" %>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <%= form.label :credit, "Credit Amount", class: "form-label fw-medium" %>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                <%= form.number_field :credit, class: "form-control", step: "0.01", placeholder: "e.g., 50.00" %>
+              </div>
             </div>
           </div>
         </div>
