@@ -16,8 +16,8 @@ services:
       DATABASE_ADAPTER: sqlite3
       DATABASE_STORAGE: /workspaces/db/development.sqlite3
 
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
-
+      command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+      # command: sleep "infinity"
     ports:
       - "3000:3000"
 
