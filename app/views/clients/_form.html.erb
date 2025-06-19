@@ -104,7 +104,7 @@
             <div class="mt-3 mb-2">
               <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-2">
                 <h5 class="mb-0">
-                  <i class="bi bi-image me-2"></i>Add Images
+                  <i class="bi bi-image me-2"></i>Client Images
                 </h5>
               </div>
               <div class="mb-2">
@@ -112,46 +112,154 @@
               </div>
             </div>
 
-            <!-- Dental Map Section (ActiveStorage) -->
+            <!-- Dental Map Section (Fabric.js Editor) -->
             <!-- Odontogram editing is NOT allowed on client creation as per new requirements -->
             <!-- This section will only show for EDITING an existing client -->
-            <% unless client.new_record? %>
-            <!-- Dental Map Section (Fabric.js Editor) -->
-            <div class="mt-3" data-controller="odontogram-editor" data-odontogram-editor-initial-canvas-json-value="<%= client.dental_map.attached? ? client.dental_map.blob.download.then { |data| ERB::Util.html_escape(data) }.html_safe : 'null' %>">
+
+            <div class="mt-3"
+                                         data-controller="odontogram-editor"
+                                         data-odontogram-editor-image-url-value="<%= asset_path('default_odontogram.png') %>"
+                                         data-odontogram-editor-json-url-value="<%= client.dental_map.attached? ? url_for(client.dental_map) : '' %>">
               <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-2">
                 <h5 class="mb-0"><i class="bi bi-pencil-ruler me-2"></i>Dental Map Editor</h5>
-                <div>
-                  <button type="button" class="btn btn-sm btn-outline-secondary me-2" data-action="odontogram-editor#addTestShape">Add Test Shape</button>
-                  <button type="button" class="btn btn-sm btn-warning" data-action="odontogram-editor#restoreDefault">
-                    <i class="bi bi-arrow-counterclockwise me-1"></i>Restore to Default
-                  </button>
-                </div>
               </div>
-              <div class="mb-2 text-center" style="border: 1px solid #ccc; background-color: #f8f9fa;">
+              <!-- Free drawing toolbar -->
+              <div class="mb-2 d-flex align-items-center gap-2">
+                <label class="mb-0">Color: <input type="color" id="brush-color" value="#000000"></label>
+                <label class="mb-0">Size: <input type="range" id="brush-size" min="1" max="50" value="5"></label>
+                <button type="button" id="clear-drawing" class="btn btn-sm btn-warning">Clear Drawing</button>
+                <button type="button" id="zoom-in" class="btn btn-sm btn-secondary">Zoom In</button>
+                <button type="button" id="zoom-out" class="btn btn-sm btn-secondary">Zoom Out</button>
+              </div>
+              <div class="mb-2 text-center" style="border: 1px solid #ccc; background-color: #f8f9fa; overflow: auto;">
                 <canvas data-odontogram-editor-target="canvas" style="display: block; margin: auto;"></canvas>
               </div>
               <%# Hidden field to store the Fabric.js canvas JSON data %>
               <%= form.hidden_field :dental_map_json, data: { odontogram_editor_target: "canvasJsonOutput" } %>
-              <%# Remove the old direct file_field for dental_map, if any survived %>
-              <%# The form previously had form.file_field :dental_map, which is now obsolete for this section %>
             </div>
-            <% end %>
-        </div>
+            <!-- Fabric.js CDN and dental map editor logic -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                // Only run if the dental map editor section exists
+                var odontogramSection = document.querySelector('[data-controller="odontogram-editor"]');
+                if (!odontogramSection) return;
 
-        <div class="card-footer bg-light p-2"> <!-- Reduced padding -->
-          <div class="d-flex justify-content-end gap-2">
-            <% if defined?(clients_path) %>
-              <%= link_to clients_path, class: "btn btn-outline-secondary btn-sm" do %>
-                <i class="bi bi-x-circle me-1"></i>Cancel
-              <% end %>
-            <% end %>
-            <%= form.submit class: "btn btn-primary btn-sm", value: client.new_record? ? "Create Client" : "Update Client" %>
+                var canvasElem = odontogramSection.querySelector('canvas[data-odontogram-editor-target="canvas"]');
+                var hiddenJsonField = odontogramSection.querySelector('input[name="client[dental_map_json]"]');
+                var imageUrl = odontogramSection.dataset.odontogramEditorImageUrlValue;
+                var canvas = new fabric.Canvas(canvasElem, {
+                  preserveObjectStacking: true
+                });
+                // Enable free drawing
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush.color = '#000000';
+                canvas.freeDrawingBrush.width = 5;
+                // Load background image
+                if (imageUrl && imageUrl.length) {
+                  fabric.Image.fromURL(imageUrl, function(img) {
+                    canvas.setBackgroundImage(img, function() {
+                      canvas.setWidth(img.width);
+                      canvas.setHeight(img.height);
+                      // Load saved drawing from JSON URL if present
+                      var jsonUrl = odontogramSection.dataset.odontogramEditorJsonUrlValue;
+                      if (jsonUrl && jsonUrl.length) {
+                        fetch(jsonUrl)
+                          .then(function(resp) { return resp.text(); })
+                          .then(function(json) {
+                            hiddenJsonField.value = json;
+                            canvas.loadFromJSON(json, function() {
+                              // Reapply background after drawing loaded
+                              canvas.setBackgroundImage(img, function() {
+                                canvas.renderAll();
+                                syncCanvasJson();
+                              }, { originX: 'left', originY: 'top' });
+                            });
+                          });
+                      } else {
+                        canvas.renderAll();
+                        syncCanvasJson();
+                      }
+                    }, { originX: 'left', originY: 'top' });
+                  });
+                }
+
+
+
+                // Sync canvas JSON to hidden field
+                function syncCanvasJson() {
+                  hiddenJsonField.value = JSON.stringify(canvas.toJSON());
+                }
+                canvas.on('object:added', syncCanvasJson);
+                canvas.on('object:modified', syncCanvasJson);
+                canvas.on('object:removed', syncCanvasJson);
+                canvas.on('object:moving', syncCanvasJson);
+                canvas.on('object:scaling', syncCanvasJson);
+                canvas.on('object:rotating', syncCanvasJson);
+
+                // Also sync on form submit
+                var form = odontogramSection.closest('form');
+                if (form) {
+                  form.addEventListener('submit', syncCanvasJson);
+                }
+
+                // Toolbar controls
+                var colorInput = document.getElementById('brush-color');
+                var sizeInput = document.getElementById('brush-size');
+                var clearBtn = document.getElementById('clear-drawing');
+                var zoomInBtn = document.getElementById('zoom-in');
+                var zoomOutBtn = document.getElementById('zoom-out');
+                colorInput.addEventListener('change', function() { canvas.freeDrawingBrush.color = this.value; });
+                sizeInput.addEventListener('change', function() { canvas.freeDrawingBrush.width = parseInt(this.value, 10); });
+                clearBtn.addEventListener('click', function() {
+                  // Remove all drawn objects but keep background
+                  var objs = canvas.getObjects().slice();
+                  objs.forEach(function(obj) { canvas.remove(obj); });
+                  canvas.renderAll();
+                  syncCanvasJson();
+                });
+                // Zoom controls
+                zoomInBtn.addEventListener('click', function() {
+                  var zoom = canvas.getZoom() || 1;
+                  zoom *= 1.1;
+                  canvas.setZoom(zoom);
+                });
+                zoomOutBtn.addEventListener('click', function() {
+                  var zoom = canvas.getZoom() || 1;
+                  zoom /= 1.1;
+                  canvas.setZoom(zoom);
+                });
+                // Mouse wheel zoom
+                canvas.on('mouse:wheel', function(opt) {
+                  var delta = opt.e.deltaY;
+                  var zoom = canvas.getZoom() || 1;
+                  zoom *= 0.999 ** delta;
+                  if (zoom > 20) zoom = 20;
+                  if (zoom < 0.01) zoom = 0.01;
+                  canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+                  opt.e.preventDefault();
+                  opt.e.stopPropagation();
+                });
+
+                // Initial sync
+                syncCanvasJson();
+                });
+              </script>
           </div>
+          <div class="card-footer bg-light p-2"> <!-- Reduced padding -->
+              <div class="d-flex justify-content-end gap-2">
+                <% if defined?(clients_path) %>
+                  <%= link_to clients_path, class: "btn btn-outline-secondary btn-sm" do %>
+                    <i class="bi bi-x-circle me-1"></i>Cancel
+                  <% end %>
+                <% end %>
+                <%= form.submit class: "btn btn-primary btn-sm", value: client.new_record? ? "Create Client" : "Update Client" %>
+              </div>
+            </div>
+          <% end %>  <!-- closes form_with -->
         </div>
-      <% end %>
-    </div>
+      </div>
   </div>
-</div>
 
 <script>
   // Existing JS functions for formatting CPF, Phone, Postal Code remain unchanged
