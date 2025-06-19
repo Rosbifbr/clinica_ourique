@@ -120,11 +120,31 @@
 
                 <div class="card border-0 shadow-sm mb-4"
                      data-controller="odontogram-editor"
+                     data-odontogram-editor-background-url-value="<%= asset_path('default_odontogram.png') %>"
                      data-odontogram-editor-initial-canvas-json-value="<%= @client.dental_map.attached? ? @client.dental_map.blob.download.then { |data| ERB::Util.html_escape(data) }.html_safe : 'null' %>">
                   <div class="card-body text-center p-2" style="background-color: #f8f9fa;"> <%# Reduced padding %>
                     <canvas data-odontogram-editor-target="canvas" style="display: block; margin: auto; max-width: 100%; height: auto; min-height: 350px;"></canvas> <%# Adjusted min-height for larger preview %>
                   </div>
                 </div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    var container = document.querySelector('[data-controller="odontogram-editor"]');
+                    if (!container) return;
+                    var canvasElem = container.querySelector('canvas[data-odontogram-editor-target="canvas"]');
+                    var bgUrl = container.dataset.odontogramEditorBackgroundUrlValue;
+                    var savedJson = container.dataset.odontogramEditorInitialCanvasJsonValue;
+                    var canvas = new fabric.StaticCanvas(canvasElem);
+                    fabric.Image.fromURL(bgUrl, function(img) {
+                      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), { originX: 'left', originY: 'top' });
+                      if (savedJson && savedJson != 'null') {
+                        canvas.loadFromJSON(savedJson, function() {
+                          canvas.renderAll();
+                        });
+                      }
+                    }, { crossOrigin: 'anonymous' });
+                  });
+                </script>
             </div>
 
             <!-- Procedures -->

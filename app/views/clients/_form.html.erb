@@ -128,6 +128,9 @@
                 <label class="mb-0">Color: <input type="color" id="brush-color" value="#000000"></label>
                 <label class="mb-0">Size: <input type="range" id="brush-size" min="1" max="50" value="5"></label>
                 <button type="button" id="clear-drawing" class="btn btn-sm btn-warning">Clear Drawing</button>
+                <button type="button" id="select-mode" class="btn btn-sm btn-info">Select Mode</button>
+                <button type="button" id="copy-selected" class="btn btn-sm btn-success">Copy</button>
+                <button type="button" id="delete-selected" class="btn btn-sm btn-danger">Delete</button>
                 <button type="button" id="zoom-in" class="btn btn-sm btn-secondary">Zoom In</button>
                 <button type="button" id="zoom-out" class="btn btn-sm btn-secondary">Zoom Out</button>
               </div>
@@ -207,6 +210,9 @@
                 var colorInput = document.getElementById('brush-color');
                 var sizeInput = document.getElementById('brush-size');
                 var clearBtn = document.getElementById('clear-drawing');
+                var selectModeBtn = document.getElementById('select-mode');
+                var copyBtn = document.getElementById('copy-selected');
+                var deleteBtn = document.getElementById('delete-selected');
                 var zoomInBtn = document.getElementById('zoom-in');
                 var zoomOutBtn = document.getElementById('zoom-out');
                 colorInput.addEventListener('change', function() { canvas.freeDrawingBrush.color = this.value; });
@@ -217,6 +223,33 @@
                   objs.forEach(function(obj) { canvas.remove(obj); });
                   canvas.renderAll();
                   syncCanvasJson();
+                });
+
+                selectModeBtn.addEventListener('click', function() {
+                  // Toggle between drawing and object selection modes
+                  canvas.isDrawingMode = !canvas.isDrawingMode;
+                  canvas.selection = !canvas.isDrawingMode;
+                  selectModeBtn.textContent = canvas.isDrawingMode ? 'Select Mode' : 'Draw Mode';
+                });
+
+                copyBtn.addEventListener('click', function() {
+                  var active = canvas.getActiveObject();
+                  if (active) {
+                    active.clone(function(cloned) {
+                      cloned.set({ left: active.left + 10, top: active.top + 10 });
+                      canvas.add(cloned);
+                      canvas.setActiveObject(cloned);
+                      syncCanvasJson();
+                    });
+                  }
+                });
+
+                deleteBtn.addEventListener('click', function() {
+                  var active = canvas.getActiveObject();
+                  if (active) {
+                    canvas.remove(active);
+                    syncCanvasJson();
+                  }
                 });
                 // Zoom controls
                 zoomInBtn.addEventListener('click', function() {
