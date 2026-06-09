@@ -118,8 +118,8 @@
 
             <div class="mt-3"
                                          data-controller="odontogram-editor"
-                                         data-odontogram-editor-image-url-value="<%= asset_path('default_odontogram.png') %>"
-                                         data-odontogram-editor-json-url-value="<%= client.dental_map.attached? ? url_for(client.dental_map) : '' %>">
+                                         data-odontogram-editor-background-url-value="<%= asset_path('default_odontogram.png') %>"
+                                         data-odontogram-editor-initial-canvas-json-value="<%= client.dental_map.attached? ? client.dental_map.blob.download.then { |data| ERB::Util.html_escape(data) }.html_safe : 'null' %>">
               <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-2">
                 <h5 class="mb-0"><i class="bi bi-pencil-ruler me-2"></i>Dental Map Editor</h5>
               </div>
@@ -140,144 +140,8 @@
               <%# Hidden field to store the Fabric.js canvas JSON data %>
               <%= form.hidden_field :dental_map_json, data: { odontogram_editor_target: "canvasJsonOutput" } %>
             </div>
-            <!-- Fabric.js CDN and dental map editor logic -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script>
-              document.addEventListener("DOMContentLoaded", function() {
-                // Only run if the dental map editor section exists
-                var odontogramSection = document.querySelector('[data-controller="odontogram-editor"]');
-                if (!odontogramSection) return;
-
-                var canvasElem = odontogramSection.querySelector('canvas[data-odontogram-editor-target="canvas"]');
-                var hiddenJsonField = odontogramSection.querySelector('input[name="client[dental_map_json]"]');
-                var imageUrl = odontogramSection.dataset.odontogramEditorImageUrlValue;
-                var canvas = new fabric.Canvas(canvasElem, {
-                  preserveObjectStacking: true
-                });
-                // Enable free drawing
-                canvas.isDrawingMode = true;
-                canvas.freeDrawingBrush.color = '#000000';
-                canvas.freeDrawingBrush.width = 5;
-                // Load background image
-                if (imageUrl && imageUrl.length) {
-                  fabric.Image.fromURL(imageUrl, function(img) {
-                    canvas.setBackgroundImage(img, function() {
-                      canvas.setWidth(img.width);
-                      canvas.setHeight(img.height);
-                      // Load saved drawing from JSON URL if present
-                      var jsonUrl = odontogramSection.dataset.odontogramEditorJsonUrlValue;
-                      if (jsonUrl && jsonUrl.length) {
-                        fetch(jsonUrl)
-                          .then(function(resp) { return resp.text(); })
-                          .then(function(json) {
-                            hiddenJsonField.value = json;
-                            canvas.loadFromJSON(json, function() {
-                              // Reapply background after drawing loaded
-                              canvas.setBackgroundImage(img, function() {
-                                canvas.renderAll();
-                                syncCanvasJson();
-                              }, { originX: 'left', originY: 'top' });
-                            });
-                          });
-                      } else {
-                        canvas.renderAll();
-                        syncCanvasJson();
-                      }
-                    }, { originX: 'left', originY: 'top' });
-                  });
-                }
 
 
-
-                // Sync canvas JSON to hidden field
-                function syncCanvasJson() {
-                  hiddenJsonField.value = JSON.stringify(canvas.toJSON());
-                }
-                canvas.on('object:added', syncCanvasJson);
-                canvas.on('object:modified', syncCanvasJson);
-                canvas.on('object:removed', syncCanvasJson);
-                canvas.on('object:moving', syncCanvasJson);
-                canvas.on('object:scaling', syncCanvasJson);
-                canvas.on('object:rotating', syncCanvasJson);
-
-                // Also sync on form submit
-                var form = odontogramSection.closest('form');
-                if (form) {
-                  form.addEventListener('submit', syncCanvasJson);
-                }
-
-                // Toolbar controls
-                var colorInput = document.getElementById('brush-color');
-                var sizeInput = document.getElementById('brush-size');
-                var clearBtn = document.getElementById('clear-drawing');
-                var selectModeBtn = document.getElementById('select-mode');
-                var copyBtn = document.getElementById('copy-selected');
-                var deleteBtn = document.getElementById('delete-selected');
-                var zoomInBtn = document.getElementById('zoom-in');
-                var zoomOutBtn = document.getElementById('zoom-out');
-                colorInput.addEventListener('change', function() { canvas.freeDrawingBrush.color = this.value; });
-                sizeInput.addEventListener('change', function() { canvas.freeDrawingBrush.width = parseInt(this.value, 10); });
-                clearBtn.addEventListener('click', function() {
-                  // Remove all drawn objects but keep background
-                  var objs = canvas.getObjects().slice();
-                  objs.forEach(function(obj) { canvas.remove(obj); });
-                  canvas.renderAll();
-                  syncCanvasJson();
-                });
-
-                selectModeBtn.addEventListener('click', function() {
-                  // Toggle between drawing and object selection modes
-                  canvas.isDrawingMode = !canvas.isDrawingMode;
-                  canvas.selection = !canvas.isDrawingMode;
-                  selectModeBtn.textContent = canvas.isDrawingMode ? 'Select Mode' : 'Draw Mode';
-                });
-
-                copyBtn.addEventListener('click', function() {
-                  var active = canvas.getActiveObject();
-                  if (active) {
-                    active.clone(function(cloned) {
-                      cloned.set({ left: active.left + 10, top: active.top + 10 });
-                      canvas.add(cloned);
-                      canvas.setActiveObject(cloned);
-                      syncCanvasJson();
-                    });
-                  }
-                });
-
-                deleteBtn.addEventListener('click', function() {
-                  var active = canvas.getActiveObject();
-                  if (active) {
-                    canvas.remove(active);
-                    syncCanvasJson();
-                  }
-                });
-                // Zoom controls
-                zoomInBtn.addEventListener('click', function() {
-                  var zoom = canvas.getZoom() || 1;
-                  zoom *= 1.1;
-                  canvas.setZoom(zoom);
-                });
-                zoomOutBtn.addEventListener('click', function() {
-                  var zoom = canvas.getZoom() || 1;
-                  zoom /= 1.1;
-                  canvas.setZoom(zoom);
-                });
-                // Mouse wheel zoom
-                canvas.on('mouse:wheel', function(opt) {
-                  var delta = opt.e.deltaY;
-                  var zoom = canvas.getZoom() || 1;
-                  zoom *= 0.999 ** delta;
-                  if (zoom > 20) zoom = 20;
-                  if (zoom < 0.01) zoom = 0.01;
-                  canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-                  opt.e.preventDefault();
-                  opt.e.stopPropagation();
-                });
-
-                // Initial sync
-                syncCanvasJson();
-                });
-              </script>
           </div>
           <div class="card-footer bg-light p-2"> <!-- Reduced padding -->
               <div class="d-flex justify-content-end gap-2">
